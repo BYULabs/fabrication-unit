@@ -113,6 +113,11 @@ function triggerCriticalFailure() {
     gameState.systemInCriticalFailure = true;
     logMessage('> CRITICAL FAILURE IMMINENT. EMERGENCY SHUTDOWN ADVISED.', '#ef4444');
     
+    // STOP PRODUCTION IMMEDIATELY - no reward given
+    gameState.isProducing = false;
+    clearInterval(gameState.productionIntervalId);
+    clearInterval(gameState.anomalySpreadIntervalId);
+    
     // Progressively expand red from border inward
     let layer = 0;
     const maxLayers = Math.ceil(gameState.gridSize / 2);
