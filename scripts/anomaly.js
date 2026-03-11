@@ -118,6 +118,9 @@ function triggerCriticalFailure() {
     clearInterval(gameState.productionIntervalId);
     clearInterval(gameState.anomalySpreadIntervalId);
     
+    // Animate progress bars to failure
+    animateProgressBarsFailure();
+    
     // Progressively expand red from border inward
     let layer = 0;
     const maxLayers = Math.ceil(gameState.gridSize / 2);

@@ -187,6 +187,30 @@ function resetProduction() {
     updateProgressBars();
 }
 
+function animateProgressBarsFailure() {
+    // Animate progress bars to red and down to 0%
+    const progressBars = ['bond-fill', 'shield-fill', 'isotope-fill', 'void-fill'];
+    progressBars.forEach(barId => {
+        const bar = document.getElementById(barId);
+        if (bar) {
+            // Change color to red
+            bar.style.background = 'linear-gradient(to right, #ff3333, #cc0000)';
+            
+            // Animate width to 0% over 2 seconds
+            let currentWidth = 100;
+            const animationInterval = setInterval(() => {
+                currentWidth -= 5;
+                bar.style.width = currentWidth + '%';
+                
+                if (currentWidth <= 0) {
+                    clearInterval(animationInterval);
+                    bar.style.width = '0%';
+                }
+            }, 40); // Update every 40ms for smooth animation
+        }
+    });
+}
+
 function emergencyShutdown() {
     logMessage('> EMERGENCY PURGE SEQUENCE INITIATED', '#ef4444');
     logMessage('> SYSTEM ENTERING COLD STANDBY', '#ffb000');
