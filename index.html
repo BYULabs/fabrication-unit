@@ -3,357 +3,614 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PLCC v1.0 - Purpose-Less Control Center</title>
+    <title>STATION_772_B Industrial Control Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap">
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @keyframes pulse-red {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.6; }
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+        
+        body {
+            font-family: 'Share Tech Mono', monospace;
         }
-        @keyframes scanline {
-            0% { transform: translateY(-100%); }
-            100% { transform: translateY(100vh); }
-        }
-        @keyframes glow {
-            0%, 100% { filter: drop-shadow(0 0 5px #00ff41); }
-            50% { filter: drop-shadow(0 0 15px #00ff41); }
-        }
-        .crt-overlay {
-            background: radial-gradient(ellipse at center, transparent 50%, rgba(0, 0, 0, 0.8) 100%);
-            pointer-events: none;
-            z-index: 100;
-        }
-        .scanline {
-            background: linear-gradient(to bottom, transparent 50%, rgba(0, 255, 65, 0.03) 50%);
-            background-size: 100% 4px;
-            pointer-events: none;
-            z-index: 101;
-        }
-        .border-bevel {
+        
+        .sunken-metal {
             border-width: 4px;
             border-style: solid;
-            border-top-color: rgba(255, 255, 255, 0.3);
-            border-left-color: rgba(255, 255, 255, 0.3);
-            border-bottom-color: rgba(0, 0, 0, 0.5);
-            border-right-color: rgba(0, 0, 0, 0.5);
+            border-top-color: rgba(0, 0, 0, 0.8);
+            border-left-color: rgba(0, 0, 0, 0.8);
+            border-bottom-color: rgba(255, 255, 255, 0.1);
+            border-right-color: rgba(255, 255, 255, 0.1);
+            box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
-        .border-bevel-active {
-            border-top-color: rgba(0, 0, 0, 0.5);
-            border-left-color: rgba(0, 0, 0, 0.5);
-            border-bottom-color: rgba(255, 255, 255, 0.3);
-            border-right-color: rgba(255, 255, 255, 0.3);
+        
+        .pulse {
+            animation: pulse 2s infinite;
         }
-        .stage-progress {
-            background: conic-gradient(
-                #00ff41 0% 65%,
-                #2a2a2e 65% 100%
-            );
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
         }
-        .labyrinth-line {
-            background: linear-gradient(to right, #00ff41, #00ff41) no-repeat;
-            background-size: 100% 2px;
-            background-position: center;
+        
+        .jitter {
+            animation: jitter 0.5s infinite alternate;
         }
+        
+        @keyframes jitter {
+            0% { transform: translateX(-1px); }
+            25% { transform: translateX(1px); }
+            50% { transform: translateX(-2px); }
+            75% { transform: translateX(2px); }
+            100% { transform: translateX(-1px); }
+        }
+        
+        .hologram-effect {
+            opacity: 0.7;
+            filter: blur(0.5px);
+            background: linear-gradient(to bottom, rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0.3));
+        }
+        
+        .scroll-ticker {
+            animation: scroll-left 30s linear infinite;
+        }
+        
+        @keyframes scroll-left {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        
+        .bubble-button {
+            border-radius: 50%;
+            box-shadow: 
+                inset 0 -5px 10px rgba(0, 0, 0, 0.5),
+                0 5px 15px rgba(0, 0, 0, 0.7),
+                0 0 0 4px rgba(0, 0, 0, 0.3);
+            transition: all 0.1s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .bubble-button:active {
+            transform: translateY(3px);
+            box-shadow: 
+                inset 0 -2px 5px rgba(0, 0, 0, 0.5),
+                0 2px 5px rgba(0, 0, 0, 0.5),
+                0 0 0 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            background: transparent;
+            cursor: pointer;
+            width: 100%;
+            height: 20px;
+        }
+        
+        input[type="range"]::-webkit-slider-track {
+            background: #333;
+            height: 8px;
+            border-radius: 4px;
+            border: 1px solid #555;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            height: 24px;
+            width: 16px;
+            background-color: #ffb000;
+            border-radius: 3px;
+            border: 2px solid #000;
+            box-shadow: 0 0 5px #ffb000;
+            margin-top: -8px;
+        }
+        
+        input[type="range"]::-moz-range-track {
+            background: #333;
+            height: 8px;
+            border-radius: 4px;
+            border: 1px solid #555;
+        }
+        
+        input[type="range"]::-moz-range-thumb {
+            height: 24px;
+            width: 16px;
+            background-color: #ffb000;
+            border-radius: 3px;
+            border: 2px solid #000;
+            box-shadow: 0 0 5px #ffb000;
+        }
+        
+        .progress-bar {
+            height: 12px;
+            background: #333;
+            border-radius: 2px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, #00ff41, #00cc33);
+            border-radius: 2px;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        
+        .grid-cell {
+            width: 100%;
+            height: 100%;
+            background-color: #2a2a2c;
+            border: 1px solid #333;
+            transition: all 0.3s;
+        }
+        
+        .grid-cell.active {
+            background-color: #00ff41;
+            box-shadow: 0 0 8px #00ff41;
+        }
+        
         .stress-meter {
-            background: linear-gradient(90deg, #00ff41 0%, #ffb000 50%, #ff0000 100%);
+            height: 6px;
+            background: linear-gradient(to right, #00ff41, #ffb000, #ef4444);
+            border-radius: 3px;
+            position: relative;
+            overflow: hidden;
         }
-        .toggle-switch-track {
-            background: linear-gradient(180deg, #555 0%, #2a2a2e 50%, #111 100%);
+        
+        .stress-indicator {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 65%;
+            background-color: #ef4444;
+            box-shadow: 0 0 10px #ef4444;
+            animation: stress-pulse 2s infinite alternate;
+        }
+        
+        @keyframes stress-pulse {
+            0% { opacity: 0.8; }
+            100% { opacity: 1; }
         }
     </style>
 </head>
-<body class="h-screen w-screen overflow-hidden bg-[#1a1a1b] font-mono relative">
-    <!-- CRT Curve Overlay -->
-    <div class="crt-overlay fixed inset-0"></div>
-    
-    <!-- Scanline Effect -->
-    <div class="scanline fixed inset-0"></div>
-    
-    <!-- Main Grid Container -->
-    <div class="h-full w-full grid grid-cols-12 grid-rows-10 gap-0">
+<body class="h-screen w-screen overflow-hidden bg-[#0f0f10] text-white p-2">
+    <!-- 12x12 Grid Container -->
+    <div class="grid grid-cols-12 grid-rows-12 gap-1 h-full w-full">
         
-        <!-- HEADER - Top 10% -->
-        <header class="col-span-12 row-span-1 bg-[#2a2a2e] border-bevel border-b-4 border-neutral-700 flex items-center justify-between px-6">
-            <div class="text-[#00ff41] text-2xl font-bold tracking-wider">
-                PLCC v1.0
+        <!-- SECTION 1: THE COMMAND HEADER (Rows 1-2) -->
+        <div class="col-span-4 row-span-2 sunken-metal bg-[#1e1e20] p-3 flex items-center justify-between">
+            <div>
+                <h1 class="text-2xl font-bold tracking-wider">STATION_772_B</h1>
+                <p class="text-xs text-gray-400 mt-1">INDUSTRIAL FABRICATION UNIT</p>
             </div>
-            <div class="flex items-center gap-4">
-                <div class="text-[#ffb000] text-sm">[SYSTEM TIME: 23:59:59]</div>
-                <div class="flex items-center gap-2">
-                    <div class="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
-                    <span class="text-red-400 font-bold tracking-widest">SYSTEM ARMED</span>
+            <div class="flex items-center">
+                <div class="pulse w-4 h-4 rounded-full bg-[#00ff41] mr-2 shadow-[0_0_10px_#00ff41]"></div>
+                <span class="text-[#00ff41] font-bold">ONLINE</span>
+            </div>
+        </div>
+        
+        <div class="col-span-8 row-span-2 sunken-metal bg-[#1e1e20] p-3 overflow-hidden">
+            <div class="relative h-full overflow-hidden">
+                <div class="scroll-ticker whitespace-nowrap text-lg font-bold absolute top-1/2 transform -translate-y-1/2">
+                    <span class="text-[#00ff41]">PRODUCTION QUOTA: 12%</span>
+                    <span class="mx-8">|</span>
+                    <span class="text-[#3b82f6]">OXYGEN LEVELS: OPTIMAL</span>
+                    <span class="mx-8">|</span>
+                    <span class="text-[#ffb000]">CITIZEN STATUS: COMPLIANT</span>
+                    <span class="mx-8">|</span>
+                    <span class="text-[#00ff41]">TEMPERATURE: 22.4°C</span>
+                    <span class="mx-8">|</span>
+                    <span class="text-[#3b82f6]">POWER DRAW: 87%</span>
+                    <span class="mx-8">|</span>
+                    <span class="text-[#ffb000]">WASTE PROCESSING: ACTIVE</span>
+                    <span class="mx-8">|</span>
+                    <span class="text-[#00ff41]">SECURITY LEVEL: ALPHA</span>
+                    <span class="mx-8">|</span>
+                    <span class="text-[#3b82f6]">HEX: 0xA1F3C8 | 0xB2E45D | 0xC9F0A2</span>
                 </div>
             </div>
-        </header>
-
-        <!-- LEFT LOG PANEL - 25% width -->
-        <section class="col-span-3 row-span-9 bg-[#1e1e20] border-bevel border-r-4 border-neutral-700 p-4 overflow-hidden">
-            <div class="text-[#ffb000] text-lg font-bold mb-3 border-b border-neutral-600 pb-1">
-                SYSTEM LOG
+        </div>
+        
+        <!-- SECTION 2: THE LEFT "WORK" STACK (Rows 3-12, Cols 1-3) -->
+        <!-- MODULE A: SYSTEM_LOG (Top 30%) -->
+        <div class="col-span-3 row-span-3 sunken-metal bg-[#1a1a1c] p-3 overflow-hidden">
+            <div class="flex justify-between items-center mb-2">
+                <h2 class="text-lg font-bold text-[#00ff41]">SYSTEM_LOG</h2>
+                <span class="text-xs text-gray-400">ACTIVE</span>
             </div>
-            <div class="space-y-1 text-xs text-[#00ff41] font-mono h-full overflow-y-auto" id="systemLog">
-                <!-- Log entries will be populated here -->
+            <div class="h-[calc(100%-2rem)] overflow-hidden bg-black p-2 rounded-sm border border-gray-800">
+                <div class="h-full overflow-y-auto font-mono text-xs">
+                    <p class="text-[#00ff41]">[12:34:22] SYSTEM BOOT: STATION_772_B ONLINE</p>
+                    <p class="text-gray-400">[12:34:25] INITIALIZING FABRICATION SEQUENCE</p>
+                    <p class="text-[#ffb000]">[12:35:10] MATERIAL INTAKE: TITANIUM ALLOY [BATCH #A7F9]</p>
+                    <p class="text-gray-400">[12:36:45] THERMAL TREATMENT: PHASE 1 COMPLETE</p>
+                    <p class="text-[#3b82f6]">[12:38:33] MOLECULAR BONDING: 87% OPTIMIZATION</p>
+                    <p class="text-gray-400">[12:40:15] QUALITY ASSURANCE: ALL PARAMETERS WITHIN TOLERANCE</p>
+                    <p class="text-[#00ff41]">[12:42:01] OUTPUT: COMPONENT #2294F COMPLETE</p>
+                    <p class="text-gray-400">[12:43:50] CONVEYOR SYSTEM: MOVING TO ASSEMBLY</p>
+                    <p class="text-[#ffb000]">[12:45:22] OPERATOR INTERVENTION: MANUAL OVERRIDE ENGAGED</p>
+                    <p class="text-gray-400">[12:46:10] PRESSURE STABILIZATION: REQUIRES ATTENTION</p>
+                    <p class="text-[#3b82f6]">[12:47:33] COOLANT FLOW: OPTIMAL</p>
+                    <p class="text-[#00ff41]">[12:48:45] PRODUCTION QUOTA: 12% ACHIEVED</p>
+                    <p class="text-gray-400">[12:50:10] NEXT CYCLE SCHEDULED: T-02:15</p>
+                    <p class="text-[#ffb000]">[12:51:22] MAINTENANCE ALERT: FILTER REPLACEMENT DUE IN 48H</p>
+                    <p class="text-gray-400">[12:52:45] SECURITY SCAN: NO ANOMALIES DETECTED</p>
+                    <p class="text-[#3b82f6]">[12:53:10] ENERGY CONSUMPTION: WITHIN PARAMETERS</p>
+                    <p class="text-[#00ff41]">[12:54:33] OPERATOR EFFICIENCY: 94%</p>
+                </div>
             </div>
-        </section>
-
-        <!-- CENTER CONSOLE - The Labyrinth -->
-        <main class="col-span-6 row-span-9 bg-[#2a2a2e] border-bevel border-r-4 border-neutral-700 p-6 relative overflow-hidden">
-            <div class="text-center mb-4">
-                <div class="text-[#ffb000] text-xl font-bold tracking-wider">CENTRAL PROCESSING UNIT</div>
-                <div class="text-[#00ff41] text-sm">COGNITIVE SYNCHRONIZATION MATRIX</div>
+        </div>
+        
+        <!-- MODULE B: MANUAL_OVERRIDE (Bottom 70%) -->
+        <div class="col-span-3 row-start-6 row-span-7 sunken-metal bg-[#1e1e20] p-3">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-lg font-bold text-[#ffb000]">MANUAL_OVERRIDE</h2>
+                <span class="text-xs text-gray-400">ACTIVE</span>
             </div>
-
-            <!-- The Labyrinth Container -->
-            <div class="h-5/6 flex items-center justify-center relative">
+            
+            <div class="h-[calc(100%-3rem)] flex flex-col justify-between">
+                <!-- Slider 1 -->
+                <div class="flex items-center">
+                    <div class="w-1/4">
+                        <p class="text-xs text-gray-300">PRESSURE</p>
+                        <p id="pressure-value" class="text-[#ffb000] font-bold text-lg">67%</p>
+                    </div>
+                    <div class="w-3/4 h-8 relative flex items-center justify-center">
+                        <input type="range" id="pressure-slider" min="0" max="100" value="67" class="slider">
+                    </div>
+                </div>
                 
-                <!-- Complex Interconnecting Lines -->
-                <div class="absolute inset-0">
-                    <!-- Main vertical line -->
-                    <div class="absolute left-1/2 top-1/4 h-1/2 w-1 bg-[#00ff41]/50 transform -translate-x-1/2"></div>
-                    
-                    <!-- Horizontal connectors -->
-                    <div class="absolute left-1/4 top-1/3 h-1 w-1/4 bg-[#00ff41]/50"></div>
-                    <div class="absolute right-1/4 top-1/3 h-1 w-1/4 bg-[#00ff41]/50"></div>
-                    
-                    <!-- Diagonal lines -->
-                    <div class="absolute left-1/3 top-2/3 h-1 w-1/3 bg-[#00ff41]/50 transform rotate-45 origin-left"></div>
-                    <div class="absolute right-1/3 top-2/3 h-1 w-1/3 bg-[#00ff41]/50 transform -rotate-45 origin-right"></div>
-                    
-                    <!-- Circular node connectors -->
-                    <div class="absolute left-1/4 top-2/3 w-1/2 h-1 bg-[#00ff41]/30"></div>
+                <!-- Slider 2 -->
+                <div class="flex items-center">
+                    <div class="w-1/4">
+                        <p class="text-xs text-gray-300">FLOW RATE</p>
+                        <p id="flow-value" class="text-[#ffb000] font-bold text-lg">42%</p>
+                    </div>
+                    <div class="w-3/4 h-8 relative flex items-center justify-center">
+                        <input type="range" id="flow-slider" min="0" max="100" value="42" class="slider">
+                    </div>
                 </div>
-
-                <!-- Stage Progress Indicator -->
-                <div class="relative z-10">
-                    <div class="stage-progress w-48 h-48 rounded-full relative">
-                        <div class="absolute inset-4 bg-[#2a2a2e] rounded-full flex items-center justify-center">
-                            <div class="text-center">
-                                <div class="text-[#00ff41] text-3xl font-bold">65%</div>
-                                <div class="text-[#ffb000] text-sm">STAGE COMPLETE</div>
-                            </div>
+                
+                <!-- Slider 3 -->
+                <div class="flex items-center">
+                    <div class="w-1/4">
+                        <p class="text-xs text-gray-300">TEMPERATURE</p>
+                        <p id="temp-value" class="text-[#ffb000] font-bold text-lg">89%</p>
+                    </div>
+                    <div class="w-3/4 h-8 relative flex items-center justify-center">
+                        <input type="range" id="temp-slider" min="0" max="100" value="89" class="slider">
+                    </div>
+                </div>
+                
+                <!-- Slider 4 -->
+                <div class="flex items-center">
+                    <div class="w-1/4">
+                        <p class="text-xs text-gray-300">VIBRATION</p>
+                        <p id="vibration-value" class="text-[#ffb000] font-bold text-lg">23%</p>
+                    </div>
+                    <div class="w-3/4 h-8 relative flex items-center justify-center">
+                        <input type="range" id="vibration-slider" min="0" max="100" value="23" class="slider">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- SECTION 3: THE PRODUCTION CORE (Rows 3-12, Cols 4-9) -->
+        <!-- MODULE C: ASSEMBLY_VISUALIZER (Top 60%) -->
+        <div class="col-span-6 row-span-6 sunken-metal bg-[#1e1e20] p-3">
+            <div class="flex justify-between items-center mb-3">
+                <h2 class="text-lg font-bold text-[#3b82f6]">ASSEMBLY_VISUALIZER</h2>
+                <span class="text-xs text-gray-400">REAL-TIME</span>
+            </div>
+            
+            <div class="grid grid-cols-10 grid-rows-1 gap-1 h-2/3 mb-4">
+                <!-- Generate 10x10 grid cells -->
+                <div class="grid-cell" id="cell-0"></div>
+                <div class="grid-cell" id="cell-1"></div>
+                <div class="grid-cell" id="cell-2"></div>
+                <div class="grid-cell" id="cell-3"></div>
+                <div class="grid-cell active" id="cell-4"></div>
+                <div class="grid-cell" id="cell-5"></div>
+                <div class="grid-cell" id="cell-6"></div>
+                <div class="grid-cell" id="cell-7"></div>
+                <div class="grid-cell" id="cell-8"></div>
+                <div class="grid-cell" id="cell-9"></div>
+                
+                <!-- More cells would be generated with JavaScript -->
+            </div>
+            
+            <div class="grid grid-cols-2 gap-3 h-1/3">
+                <!-- Progress Bar 1 -->
+                <div>
+                    <div class="flex justify-between mb-1">
+                        <span class="text-xs text-gray-300">[MOLECULAR BOND]</span>
+                        <span id="bond-progress" class="text-xs text-[#00ff41]">87%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div id="bond-fill" class="progress-fill" style="width: 87%"></div>
+                    </div>
+                </div>
+                
+                <!-- Progress Bar 2 -->
+                <div>
+                    <div class="flex justify-between mb-1">
+                        <span class="text-xs text-gray-300">[THERMAL SHIELD]</span>
+                        <span id="shield-progress" class="text-xs text-[#00ff41]">64%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div id="shield-fill" class="progress-fill" style="width: 64%"></div>
+                    </div>
+                </div>
+                
+                <!-- Progress Bar 3 -->
+                <div>
+                    <div class="flex justify-between mb-1">
+                        <span class="text-xs text-gray-300">[ISOTOPE ALIGN]</span>
+                        <span id="isotope-progress" class="text-xs text-[#00ff41]">42%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div id="isotope-fill" class="progress-fill" style="width: 42%"></div>
+                    </div>
+                </div>
+                
+                <!-- Progress Bar 4 -->
+                <div>
+                    <div class="flex justify-between mb-1">
+                        <span class="text-xs text-gray-300">[VOID SEAL]</span>
+                        <span id="void-progress" class="text-xs text-[#00ff41]">29%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div id="void-fill" class="progress-fill" style="width: 29%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- MODULE D: OPERATOR_CONTROLS (Bottom 40%) -->
+        <div class="col-span-6 row-start-9 row-span-4 sunken-metal bg-[#1e1e20] p-3">
+            <div class="flex justify-between items-center mb-3">
+                <h2 class="text-lg font-bold text-[#ffb000]">OPERATOR_CONTROLS</h2>
+                <span class="text-xs text-gray-400">AWAITING INPUT</span>
+            </div>
+            
+            <div class="grid grid-cols-3 grid-rows-2 gap-4 h-[calc(100%-3rem)]">
+                <!-- Bubble Button 1 -->
+                <button class="bubble-button bg-gradient-to-b from-red-600 to-red-800 text-white">
+                    <div class="text-center">
+                        <div class="text-lg font-bold">EMERGENCY</div>
+                        <div class="text-xs">SHUTDOWN</div>
+                    </div>
+                </button>
+                
+                <!-- Bubble Button 2 -->
+                <button class="bubble-button bg-gradient-to-b from-green-600 to-green-800 text-white">
+                    <div class="text-center">
+                        <div class="text-lg font-bold">NUCLEAR</div>
+                        <div class="text-xs">IGNITION</div>
+                    </div>
+                </button>
+                
+                <!-- Bubble Button 3 -->
+                <button class="bubble-button bg-gradient-to-b from-orange-600 to-orange-800 text-white">
+                    <div class="text-center">
+                        <div class="text-lg font-bold">CAUTION</div>
+                        <div class="text-xs">OVERRIDE</div>
+                    </div>
+                </button>
+                
+                <!-- Bubble Button 4 -->
+                <button class="bubble-button bg-gradient-to-b from-blue-600 to-blue-800 text-white">
+                    <div class="text-center">
+                        <div class="text-lg font-bold">COOLANT</div>
+                        <div class="text-xs">RELEASE</div>
+                    </div>
+                </button>
+                
+                <!-- Bubble Button 5 -->
+                <button class="bubble-button bg-gradient-to-b from-purple-600 to-purple-800 text-white">
+                    <div class="text-center">
+                        <div class="text-lg font-bold">STASIS</div>
+                        <div class="text-xs">FIELD</div>
+                    </div>
+                </button>
+                
+                <!-- Bubble Button 6 -->
+                <button class="bubble-button bg-gradient-to-b from-yellow-600 to-yellow-800 text-black">
+                    <div class="text-center">
+                        <div class="text-lg font-bold">AUXILIARY</div>
+                        <div class="text-xs">POWER</div>
+                    </div>
+                </button>
+            </div>
+        </div>
+        
+        <!-- SECTION 4: THE SUPERVISOR STACK (Rows 3-12, Cols 10-12) -->
+        <!-- MODULE E: SUPERVISOR_LINK (Top 50%) -->
+        <div class="col-span-3 row-span-5 sunken-metal bg-[#1e1e20] p-3">
+            <div class="flex justify-between items-center mb-2">
+                <h2 class="text-lg font-bold text-[#3b82f6]">SUPERVISOR_LINK</h2>
+                <span class="text-xs text-gray-400">LIVE FEED</span>
+            </div>
+            
+            <div class="hologram-effect h-2/3 mb-3 rounded-sm overflow-hidden flex items-center justify-center">
+                <!-- Placeholder for video feed -->
+                <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-900/30 to-gray-900/30">
+                    <div class="text-center">
+                        <div class="text-4xl mb-2 opacity-50">
+                            <i class="fas fa-video"></i>
                         </div>
+                        <p class="text-xs text-gray-400">SUPERVISOR FEED</p>
+                        <p class="text-xs text-gray-500">ENCRYPTED CHANNEL #772B</p>
                     </div>
-                    
-                    <!-- Nodes around the circle -->
-                    <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 w-8 h-8 bg-[#2a2a2e] border-2 border-[#00ff41] rounded-full"></div>
-                    <div class="absolute top-1/4 -right-4 transform -translate-y-1/2 w-8 h-8 bg-[#2a2a2e] border-2 border-[#00ff41] rounded-full"></div>
-                    <div class="absolute -bottom-4 left-1/2 transform -translate-x-1/2 w-8 h-8 bg-[#2a2a2e] border-2 border-[#00ff41] rounded-full"></div>
-                    <div class="absolute top-1/4 -left-4 transform -translate-y-1/2 w-8 h-8 bg-[#2a2a2e] border-2 border-[#00ff41] rounded-full"></div>
-                </div>
-
-                <!-- Main Action Bubble Button -->
-                <button id="mainAction" class="absolute bottom-10 left-1/2 transform -translate-x-1/2 bubble-button animate-glow" style="animation: glow 2s infinite;">
-                    <div class="bg-[#1a1a1b] text-[#00ff41] text-lg font-bold py-4 px-8 rounded-2xl border-bevel active:border-bevel-active transition-all duration-150 hover:brightness-110 text-center min-w-[200px]">
-                        INITIATE<br/>COGNITIVE OVERRIDE
-                    </div>
-                </button>
-            </div>
-
-            <!-- Status indicators -->
-            <div class="absolute bottom-4 left-4 flex gap-4">
-                <div class="flex items-center gap-2">
-                    <div class="w-3 h-3 bg-[#00ff41] rounded-full"></div>
-                    <span class="text-[#00ff41] text-sm">ONLINE</span>
-                </div>
-                <div class="flex items-center gap-2">
-                    <div class="w-3 h-3 bg-[#ffb000] rounded-full animate-pulse"></div>
-                    <span class="text-[#ffb000] text-sm">PROCESSING</span>
                 </div>
             </div>
-        </main>
-
-        <!-- RIGHT DIAGNOSTIC PANEL - 20% width -->
-        <aside class="col-span-3 row-span-9 bg-[#1e1e20] border-bevel p-6">
-            <div class="text-[#ffb000] text-lg font-bold mb-6 border-b border-neutral-600 pb-2">
-                DIAGNOSTICS
-            </div>
-
-            <!-- Stress Meter -->
-            <div class="mb-8">
-                <div class="text-[#00ff41] text-sm mb-2 flex justify-between">
-                    <span>STRESS METER</span>
-                    <span>80%</span>
+            
+            <div class="h-1/3">
+                <div class="flex justify-between items-center mb-1">
+                    <span class="text-xs text-gray-300">SOCIAL CREDIT SCORE</span>
+                    <span class="text-xs text-gray-400">CURRENT</span>
                 </div>
-                <div class="h-8 bg-[#2a2a2e] border-2 border-neutral-700 relative overflow-hidden">
-                    <div class="stress-meter h-full w-4/5 relative">
-                        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-pulse"></div>
-                    </div>
-                    <div class="absolute right-1/5 top-0 bottom-0 w-1 bg-white/50"></div>
+                <div class="text-center py-2 bg-black rounded-sm border border-gray-800">
+                    <div class="text-4xl font-bold text-[#00ff41]">01245</div>
                 </div>
-                <div class="text-[#ffb000] text-xs mt-1 text-right">CRITICAL THRESHOLD</div>
             </div>
-
-            <!-- Large Amber Toggle Switch -->
-            <div class="mb-8">
-                <div class="text-[#ffb000] text-sm mb-3">COGNITIVE BYPASS</div>
-                <label class="relative inline-flex items-center cursor-pointer">
-                    <input type="checkbox" class="sr-only peer" id="mainToggle">
-                    <div class="toggle-switch-track w-24 h-12 rounded-full border-4 border-neutral-700 peer-checked:after:translate-x-12 after:content-[''] after:absolute after:top-1 after:left-1 after:bg-[#ffb000] after:rounded-full after:h-10 after:w-10 after:transition-all after:border-2 after:border-neutral-600"></div>
-                </label>
-                <div class="text-[#00ff41] text-xs mt-2 text-center">ENABLE/DISABLE</div>
+        </div>
+        
+        <!-- MODULE F: SUBSYSTEMS (Bottom 50%) -->
+        <div class="col-span-3 row-span-5 sunken-metal bg-[#1e1e20] p-3">
+            <div class="flex justify-between items-center mb-3">
+                <h2 class="text-lg font-bold text-gray-400">SUBSYSTEMS</h2>
+                <span class="text-xs text-gray-400">ACCESS LIMITED</span>
             </div>
-
-            <!-- Sub Controls -->
-            <div class="space-y-4">
-                <button class="bubble-button w-full">
-                    <div class="bg-[#2a2a2e] text-[#00ff41] py-3 px-4 rounded-xl border-bevel active:border-bevel-active transition-all duration-150 text-sm">
-                        FLUSH BUFFER CACHE
-                    </div>
+            
+            <div class="h-[calc(100%-4rem)] flex flex-col justify-between">
+                <!-- Depressing Buttons -->
+                <button class="w-full py-3 bg-[#2a2a2c] text-gray-400 sunken-metal text-sm hover:bg-[#333] transition-colors">
+                    [REQUEST RATION]
                 </button>
                 
-                <button class="bubble-button w-full">
-                    <div class="bg-[#2a2a2e] text-[#00ff41] py-3 px-4 rounded-xl border-bevel active:border-bevel-active transition-all duration-150 text-sm">
-                        REINITIALIZE SEQUENCE
-                    </div>
+                <button class="w-full py-3 bg-[#2a2a2c] text-gray-400 sunken-metal text-sm hover:bg-[#333] transition-colors">
+                    [REPORT CO-WORKER]
                 </button>
                 
-                <button class="bubble-button w-full">
-                    <div class="bg-[#2a2a2e] text-[#ffb000] py-3 px-4 rounded-xl border-bevel active:border-bevel-active transition-all duration-150 text-sm font-bold">
-                        EMERGENCY PURGE
-                    </div>
+                <button class="w-full py-3 bg-[#2a2a2c] text-red-400 sunken-metal text-sm hover:bg-[#333] transition-colors">
+                    [END SHIFT]
                 </button>
-            </div>
-
-            <!-- System Status -->
-            <div class="mt-8 pt-4 border-t border-neutral-700">
-                <div class="text-[#00ff41] text-sm mb-2">SYSTEM STATUS</div>
-                <div class="space-y-1 text-xs">
-                    <div class="flex justify-between">
-                        <span class="text-[#00ff41]">CPU LOAD</span>
-                        <span class="text-[#ffb000]">87%</span>
+                
+                <!-- Stress Meter -->
+                <div class="mt-4">
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="text-xs text-gray-300">OPERATOR STRESS METER</span>
+                        <span class="text-xs text-red-400">ELEVATED</span>
                     </div>
-                    <div class="flex justify-between">
-                        <span class="text-[#00ff41]">MEMORY</span>
-                        <span class="text-[#ffb000]">92%</span>
+                    <div class="stress-meter">
+                        <div class="stress-indicator jitter"></div>
                     </div>
-                    <div class="flex justify-between">
-                        <span class="text-[#00ff41]">TEMPERATURE</span>
-                        <span class="text-[#ffb000]">64°C</span>
+                    <div class="flex justify-between mt-1">
+                        <span class="text-xs text-[#00ff41]">LOW</span>
+                        <span class="text-xs text-[#ffb000]">MEDIUM</span>
+                        <span class="text-xs text-red-400">HIGH</span>
+                        <span class="text-xs text-red-600">CRITICAL</span>
                     </div>
                 </div>
             </div>
-        </aside>
+        </div>
     </div>
 
     <script>
-        // Initialize Lucide Icons
-        lucide.createIcons();
-
-        // System log entries
-        const systemLogs = [
-            "BOOT SEQUENCE INITIATED...",
-            "COGNITIVE SYNC: 98%",
-            "NEURAL PATHWAYS: ACTIVE",
-            "BUFFER ALLOCATION: 2048MB",
-            "CRYPTOGRAPHIC SEED: GENERATED",
-            "PARALLEL PROCESSES: 16 THREADS",
-            "MEMORY FRAGMENTATION: 12%",
-            "THERMAL THRESHOLD: NORMAL",
-            "I/O THROUGHPUT: 4.2GB/s",
-            "SECURITY LAYER: ARMED",
-            "DATA INTEGRITY: VERIFIED",
-            "BACKUP ROUTINES: STANDBY",
-            "NETWORK LATENCY: 24ms",
-            "POWER DRAW: 87% CAPACITY",
-            "COOLANT FLOW: OPTIMAL",
-            "LOGICAL GATES: 100% OPERATIONAL",
-            "ERROR CORRECTION: ACTIVE",
-            "SYNCHRONIZATION: COMPLETE",
-            "STANDBY MODE: DISABLED",
-            "FINAL CHECK: ALL SYSTEMS NOMINAL"
-        ];
-
-        // Populate system log
-        const logContainer = document.getElementById('systemLog');
-        systemLogs.forEach(log => {
-            const logEntry = document.createElement('div');
-            logEntry.className = 'font-mono';
-            logEntry.textContent = `> ${log}`;
-            logContainer.appendChild(logEntry);
+        // Slider value updates
+        const pressureSlider = document.getElementById('pressure-slider');
+        const flowSlider = document.getElementById('flow-slider');
+        const tempSlider = document.getElementById('temp-slider');
+        const vibrationSlider = document.getElementById('vibration-slider');
+        
+        const pressureValue = document.getElementById('pressure-value');
+        const flowValue = document.getElementById('flow-value');
+        const tempValue = document.getElementById('temp-value');
+        const vibrationValue = document.getElementById('vibration-value');
+        
+        pressureSlider.addEventListener('input', function() {
+            pressureValue.textContent = this.value + '%';
         });
-
-        // Bubble button interaction
-        document.querySelectorAll('.bubble-button').forEach(button => {
-            button.addEventListener('mousedown', function() {
-                this.querySelector('div').classList.add('border-bevel-active');
-                this.querySelector('div').classList.remove('border-bevel');
+        
+        flowSlider.addEventListener('input', function() {
+            flowValue.textContent = this.value + '%';
+        });
+        
+        tempSlider.addEventListener('input', function() {
+            tempValue.textContent = this.value + '%';
+        });
+        
+        vibrationSlider.addEventListener('input', function() {
+            vibrationValue.textContent = this.value + '%';
+        });
+        
+        // Dynamic grid cell activation
+        function activateRandomCell() {
+            const cells = document.querySelectorAll('.grid-cell');
+            // Deactivate all cells
+            cells.forEach(cell => {
+                cell.classList.remove('active');
             });
             
-            button.addEventListener('mouseup', function() {
-                this.querySelector('div').classList.remove('border-bevel-active');
-                this.querySelector('div').classList.add('border-bevel');
-                
-                // Add a new log entry
-                const newLog = document.createElement('div');
-                newLog.className = 'font-mono text-[#00ff41]';
-                newLog.textContent = `> USER INPUT DETECTED: ${new Date().toLocaleTimeString()}`;
-                logContainer.appendChild(newLog);
-                logContainer.scrollTop = logContainer.scrollHeight;
-            });
-            
-            button.addEventListener('mouseleave', function() {
-                this.querySelector('div').classList.remove('border-bevel-active');
-                this.querySelector('div').classList.add('border-bevel');
-            });
-        });
-
-        // Main action button
-        document.getElementById('mainAction').addEventListener('click', function() {
-            const logs = [
-                "COGNITIVE OVERRIDE INITIATED",
-                "NEURAL RE-ROUTING IN PROGRESS...",
-                "WARNING: CRITICAL SYSTEMS ENGAGED",
-                "OVERRIDE SEQUENCE: 25% COMPLETE",
-                "SYSTEM STRESS: INCREASING",
-                "OVERRIDE SEQUENCE: 50% COMPLETE",
-                "THERMAL LEVELS: ELEVATED",
-                "OVERRIDE SEQUENCE: 75% COMPLETE",
-                "FINALIZING COGNITIVE REALIGNMENT",
-                "OVERRIDE SEQUENCE: 100% COMPLETE",
-                "COGNITIVE OVERRIDE SUCCESSFUL"
-            ];
-            
-            logs.forEach((log, index) => {
-                setTimeout(() => {
-                    const newLog = document.createElement('div');
-                    newLog.className = 'font-mono text-[#00ff41]';
-                    newLog.textContent = `> ${log}`;
-                    logContainer.appendChild(newLog);
-                    logContainer.scrollTop = logContainer.scrollHeight;
-                }, index * 300);
-            });
-            
-            // Pulse the SYSTEM ARMED indicator
-            const armedIndicator = document.querySelector('.text-red-400');
-            armedIndicator.classList.add('animate-pulse');
-            setTimeout(() => armedIndicator.classList.remove('animate-pulse'), 3000);
-        });
-
-        // Toggle switch
-        document.getElementById('mainToggle').addEventListener('change', function() {
-            const status = this.checked ? "ENABLED" : "DISABLED";
-            const newLog = document.createElement('div');
-            newLog.className = 'font-mono text-[#00ff41]';
-            newLog.textContent = `> COGNITIVE BYPASS: ${status}`;
-            logContainer.appendChild(newLog);
-            logContainer.scrollTop = logContainer.scrollHeight;
-        });
-
-        // Update system time every second
-        function updateSystemTime() {
-            const now = new Date();
-            const timeString = now.toLocaleTimeString('en-US', { 
-                hour12: false,
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit'
-            });
-            document.querySelector('[class*="SYSTEM TIME"]').textContent = `[SYSTEM TIME: ${timeString}]`;
+            // Activate random cells
+            const activeCount = Math.floor(Math.random() * 5) + 3;
+            for (let i = 0; i < activeCount; i++) {
+                const randomIndex = Math.floor(Math.random() * cells.length);
+                cells[randomIndex].classList.add('active');
+            }
         }
-        setInterval(updateSystemTime, 1000);
-        updateSystemTime();
+        
+        // Progress bar animations
+        function updateProgressBars() {
+            const bondFill = document.getElementById('bond-fill');
+            const shieldFill = document.getElementById('shield-fill');
+            const isotopeFill = document.getElementById('isotope-fill');
+            const voidFill = document.getElementById('void-fill');
+            
+            const bondProgress = document.getElementById('bond-progress');
+            const shieldProgress = document.getElementById('shield-progress');
+            const isotopeProgress = document.getElementById('isotope-progress');
+            const voidProgress = document.getElementById('void-progress');
+            
+            // Randomize progress values slightly
+            const bondValue = Math.min(100, Math.max(0, 87 + Math.floor(Math.random() * 6) - 3));
+            const shieldValue = Math.min(100, Math.max(0, 64 + Math.floor(Math.random() * 6) - 3));
+            const isotopeValue = Math.min(100, Math.max(0, 42 + Math.floor(Math.random() * 6) - 3));
+            const voidValue = Math.min(100, Math.max(0, 29 + Math.floor(Math.random() * 6) - 3));
+            
+            bondFill.style.width = bondValue + '%';
+            shieldFill.style.width = shieldValue + '%';
+            isotopeFill.style.width = isotopeValue + '%';
+            voidFill.style.width = voidValue + '%';
+            
+            bondProgress.textContent = bondValue + '%';
+            shieldProgress.textContent = shieldValue + '%';
+            isotopeProgress.textContent = isotopeValue + '%';
+            voidProgress.textContent = voidValue + '%';
+        }
+        
+        // Bubble button interactions
+        const bubbleButtons = document.querySelectorAll('.bubble-button');
+        bubbleButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Add a click effect
+                this.style.transform = 'translateY(3px)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 100);
+                
+                // Log the action
+                const logDiv = document.querySelector('.overflow-y-auto');
+                const time = new Date();
+                const timeString = `[${time.getHours().toString().padStart(2, '0')}:${time.getMinutes().toString().padStart(2, '0')}:${time.getSeconds().toString().padStart(2, '0')}]`;
+                const action = this.textContent.trim().replace(/\s+/g, ' ');
+                
+                const logEntry = document.createElement('p');
+                logEntry.className = 'text-[#ffb000]';
+                logEntry.textContent = `${timeString} OPERATOR ACTION: ${action}`;
+                
+                logDiv.prepend(logEntry);
+                
+                // Keep log at reasonable length
+                if (logDiv.children.length > 20) {
+                    logDiv.removeChild(logDiv.lastChild);
+                }
+            });
+        });
+        
+        // Initialize animations
+        setInterval(activateRandomCell, 2000);
+        setInterval(updateProgressBars, 3000);
+        
+        // Initialize with random cells
+        activateRandomCell();
     </script>
 </body>
 </html>
