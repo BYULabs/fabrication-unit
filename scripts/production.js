@@ -50,25 +50,31 @@ function startProduction() {
             }
         }
 
-        // Increase progress bars proportional to speed multiplier
-        // Higher overrides = faster progress
-        gameState.progressValues.bond = Math.min(100, gameState.progressValues.bond + (Math.random() * 8 * speedMultiplier));
-        gameState.progressValues.shield = Math.min(100, gameState.progressValues.shield + (Math.random() * 6 * speedMultiplier));
-        gameState.progressValues.isotope = Math.min(100, gameState.progressValues.isotope + (Math.random() * 7 * speedMultiplier));
-        gameState.progressValues.void = Math.min(100, gameState.progressValues.void + (Math.random() * 5 * speedMultiplier));
+        // Update progress bars based on grid fill percentage (0-100 cells filled)
+        // Progress bars only reach 100% when all 100 cells are filled
+        const gridFillPercentage = (gameState.activeCells.size / 100) * 100;
+        gameState.progressValues.bond = gridFillPercentage * 0.95 + Math.random() * 5;
+        gameState.progressValues.shield = gridFillPercentage * 0.92 + Math.random() * 8;
+        gameState.progressValues.isotope = gridFillPercentage * 0.98 + Math.random() * 2;
+        gameState.progressValues.void = gridFillPercentage * 0.90 + Math.random() * 10;
+
+        // Cap all at 100%
+        gameState.progressValues.bond = Math.min(100, gameState.progressValues.bond);
+        gameState.progressValues.shield = Math.min(100, gameState.progressValues.shield);
+        gameState.progressValues.isotope = Math.min(100, gameState.progressValues.isotope);
+        gameState.progressValues.void = Math.min(100, gameState.progressValues.void);
 
         // Update progress bars
         updateProgressBars();
 
-        // Check if complete
-        if (gameState.activeCells.size === 100 && 
-            gameState.progressValues.bond >= 100 && 
-            gameState.progressValues.shield >= 100 && 
-            gameState.progressValues.isotope >= 100 && 
-            gameState.progressValues.void >= 100) {
-            
+        // Check if complete - production ends when all 100 cells are filled
+        if (gameState.activeCells.size === 100) {
             clearInterval(productionInterval);
             gameState.isProducing = false;
+            
+            // Ensure all progress bars reach 100%
+            gameState.progressValues = { bond: 100, shield: 100, isotope: 100, void: 100 };
+            updateProgressBars();
             
             // Clear any anomalies
             gameState.anomalies = [];
