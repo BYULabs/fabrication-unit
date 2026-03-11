@@ -2,6 +2,52 @@
 // This file handles fixing anomalies detected in the production grid
 // Anomalies are generated per-cell in production.js based on override probability
 
+function getAdjacentCells(cellIndex) {
+    const row = Math.floor(cellIndex / 10);
+    const col = cellIndex % 10;
+    const adjacent = [];
+    
+    // Up
+    if (row > 0) adjacent.push(cellIndex - 10);
+    // Down
+    if (row < 9) adjacent.push(cellIndex + 10);
+    // Left
+    if (col > 0) adjacent.push(cellIndex - 1);
+    // Right
+    if (col < 9) adjacent.push(cellIndex + 1);
+    
+    return adjacent;
+}
+
+function spreadAnomaly(anomaly) {
+    if (!anomaly || !anomaly.isActive) return;
+    
+    // Find all cells with this anomaly color
+    const anomalyCells = Array.from(document.querySelectorAll(`[data-anomaly-type="${anomaly.type}"]`));
+    const cellIndices = anomalyCells.map(cell => parseInt(cell.id.replace('cell-', '')));
+    
+    const anomalyData = ANOMALY_TYPES[anomaly.type];
+    const cellColor = ANOMALY_COLORS[anomaly.type];
+    
+    // For each anomalous cell, spread to adjacent active cells
+    cellIndices.forEach(cellIndex => {
+        const adjacent = getAdjacentCells(cellIndex);
+        adjacent.forEach(adjIndex => {
+            const adjCell = document.getElementById(`cell-${adjIndex}`);
+            if (adjCell && adjCell.classList.contains('active') && !adjCell.dataset.anomalyType) {
+                // Infect this adjacent cell
+                adjCell.style.backgroundColor = cellColor;
+                adjCell.style.boxShadow = `0 0 8px ${cellColor}`;
+                adjCell.dataset.anomalyType = anomaly.type;
+                
+                anomaly.cellCount = (anomaly.cellCount || 1) + 1;
+            }
+        });
+    });
+    
+    logMessage(`> ANOMALY SPREADING: ${anomalyData.name} INFECTED ${anomalyCells.length} CELLS`, anomalyData.color);
+}
+
 function fixAnomaly(anomaly) {
     if (!anomaly) return;
     

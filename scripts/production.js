@@ -26,9 +26,9 @@ function startProduction() {
 
     // Production loop - fill random cells and increase progress bars
     // Speed is dynamically adjusted based on current manual override values
-    const productionInterval = setInterval(() => {
+    gameState.productionIntervalId = setInterval(() => {
         if (!gameState.isProducing) {
-            clearInterval(productionInterval);
+            clearInterval(gameState.productionIntervalId);
             return;
         }
 
@@ -106,7 +106,8 @@ function startProduction() {
 
         // Check if complete - production ends when all 100 cells are filled
         if (gameState.activeCells.size === 100) {
-            clearInterval(productionInterval);
+            clearInterval(gameState.productionIntervalId);
+            clearInterval(gameState.anomalySpreadIntervalId);
             gameState.isProducing = false;
             
             // Ensure all progress bars reach 100%
@@ -124,7 +125,28 @@ function startProduction() {
                 resetProduction();
             }, 3000);
         }
-    }, 50);
+    }, 200);
+    
+    // Anomaly spreading interval - unfixed anomalies spread every 2 seconds
+    gameState.anomalySpreadIntervalId = setInterval(() => {
+        if (!gameState.isProducing) {
+            clearInterval(gameState.anomalySpreadIntervalId);
+            return;
+        }
+        
+        // Check each active anomaly to see if it should spread
+        gameState.anomalies.forEach(anomaly => {
+            if (anomaly.isActive) {
+                // Check how long the anomaly has been active
+                const timeActive = Date.now() - anomaly.startTime;
+                
+                // Spread happens every 2 seconds if not fixed
+                if (timeActive > 2000 && timeActive % 2000 < 200) {
+                    spreadAnomaly(anomaly);
+                }
+            }
+        });
+    }, 1000);
 }
 
 function resetProduction() {
@@ -149,6 +171,10 @@ function emergencyShutdown() {
     gameState.systemInCriticalFailure = false;
     gameState.anomalies = [];
     gameState.criticalAnomalies = 0;
+    
+    // Clear production intervals
+    clearInterval(gameState.productionIntervalId);
+    clearInterval(gameState.anomalySpreadIntervalId);
     
     // Reset grid
     resetProduction();

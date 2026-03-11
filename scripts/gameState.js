@@ -18,7 +18,9 @@ const gameState = {
     systemInCriticalFailure: false,
     anomalyTimers: {},
     overrideTargets: {},
-    anomalyNextTrigger: null
+    anomalyNextTrigger: null,
+    productionIntervalId: null,
+    anomalySpreadIntervalId: null
 };
 
 // ============= STRESS CALCULATION =============
