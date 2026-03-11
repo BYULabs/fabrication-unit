@@ -2,6 +2,23 @@
 // This file handles fixing anomalies detected in the production grid
 // Anomalies are generated per-cell in production.js based on override probability
 
+// ============= WARNING THRESHOLD SYSTEM =============
+// Check if anomalies have spread too far - system collapse if exceeded
+const WARNING_CRITICAL_THRESHOLD = 15; // System collapses if 30+ cells are anomalous
+
+function countTotalAnomalies() {
+    return document.querySelectorAll('[data-anomaly-type]').length;
+}
+
+function checkWarningThreshold() {
+    const totalAnomalies = countTotalAnomalies();
+    if (totalAnomalies >= WARNING_CRITICAL_THRESHOLD && !gameState.systemInCriticalFailure) {
+        logMessage(`> SYSTEM INTEGRITY FAILURE: ${totalAnomalies}/${WARNING_CRITICAL_THRESHOLD} CRITICAL THRESHOLD REACHED`, '#ff3333');
+        logMessage('> INFRASTRUCTURE COLLAPSE DETECTED', '#ef4444');
+        triggerCriticalFailure();
+    }
+}
+
 function getAdjacentCells(cellIndex) {
     const row = Math.floor(cellIndex / 10);
     const col = cellIndex % 10;
@@ -47,6 +64,9 @@ function spreadAnomaly(anomaly) {
     });
     
     logMessage(`> ANOMALY SPREADING: ${anomalyData.name} INFECTED ${anomalyCells.length} CELLS`, anomalyData.color);
+    
+    // Check if warning threshold exceeded after spread
+    checkWarningThreshold();
 }
 
 function fixAnomaly(anomaly) {
@@ -77,6 +97,12 @@ function fixAnomaly(anomaly) {
     // Disable glitch if no more active anomalies
     if (gameState.anomalies.filter(a => a.isActive).length === 0) {
         disableSupervisorGlitch();
+    }
+    
+    // Log how many anomalies remain
+    const remainingAnomalies = countTotalAnomalies();
+    if (remainingAnomalies > 0) {
+        logMessage(`> ANOMALY COUNT: ${remainingAnomalies} CELLS REMAINING INFECTED`, '#ff8c42');
     }
 }
 

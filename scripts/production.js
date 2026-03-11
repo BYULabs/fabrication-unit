@@ -82,6 +82,9 @@ function startProduction() {
                                 // Update existing anomaly's cell count
                                 existingAnomaly.cellCount = (existingAnomaly.cellCount || 1) + 1;
                             }
+                            
+                            // Check if warning threshold exceeded after anomaly creation
+                            checkWarningThreshold();
                         }
                     }
                 }
@@ -172,6 +175,14 @@ function emergencyShutdown() {
     gameState.systemInCriticalFailure = false;
     gameState.anomalies = [];
     gameState.criticalAnomalies = 0;
+    
+    // Clear all anomalies from grid visually
+    document.querySelectorAll('[data-anomaly-type]').forEach(cell => {
+        cell.style.backgroundColor = '';
+        cell.style.boxShadow = '';
+        delete cell.dataset.anomalyType;
+        updateGridCell(parseInt(cell.id.replace('cell-', '')), 'active');
+    });
     
     // Clear production intervals
     clearInterval(gameState.productionIntervalId);
