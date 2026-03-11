@@ -130,8 +130,14 @@ function startProduction() {
             // Complete sequence
             logMessage('> SYSTEM COOLING...', '#ffb000');
             setTimeout(() => {
+                // Calculate payment based on number of active cells (green boxes)
+                const activeCellCount = document.querySelectorAll('.grid-cell.active').length;
+                const paymentPerCell = 20;
+                const completionBonus = activeCellCount * paymentPerCell;
+                
                 logMessage('> UNIT COMPLETE. QUOTA UPDATED.', '#00ff41');
-                updateSocialCredit(2000);
+                logMessage(`> COMPLETION BONUS: ${completionBonus} CREDITS (${activeCellCount} ACTIVE CELLS)`, '#00ff41');
+                updateSocialCredit(completionBonus);
                 resetProduction();
             }, 3000);
         }
