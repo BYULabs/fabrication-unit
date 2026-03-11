@@ -10,6 +10,7 @@ function startProduction() {
     gameState.anomalies = [];
     gameState.criticalAnomalies = 0;
     gameState.systemInCriticalFailure = false;
+    gameState.rationRequested = false;
     
     logMessage('> PRODUCTION CYCLE 01: START', '#3b82f6');
     playClickSound();
@@ -185,6 +186,7 @@ function emergencyShutdown() {
     
     gameState.isProducing = false;
     gameState.systemInCriticalFailure = false;
+    gameState.rationRequested = false;
     gameState.anomalies = [];
     gameState.criticalAnomalies = 0;
     

@@ -16,6 +16,7 @@ const gameState = {
     anomalies: [],
     criticalAnomalies: 0,
     systemInCriticalFailure: false,
+    rationRequested: false,
     anomalyTimers: {},
     overrideTargets: {},
     anomalyNextTrigger: null,

@@ -29,7 +29,13 @@ function initializeControls() {
 
     // REQUEST RATION button
     document.getElementById('btn-request-ration')?.addEventListener('click', function() {
+        if (gameState.rationRequested) {
+            playBuzzerSound();
+            logMessage('> RATION REQUEST ALREADY SUBMITTED. DENIED.', '#ef4444');
+            return;
+        }
         playClickSound();
+        gameState.rationRequested = true;
         updateSocialCredit(3000);
         logMessage('> RATION REQUEST APPROVED. CREDITS AWARDED.', '#00ff41');
     });
