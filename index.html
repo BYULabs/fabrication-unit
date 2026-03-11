@@ -281,17 +281,21 @@
                 <span class="text-xs text-gray-400">LIVE FEED</span>
             </div>
             
-            <div class="hologram-effect h-2/3 mb-3 rounded-sm overflow-hidden flex items-center justify-center">
-                <!-- Placeholder for video feed -->
-                <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-900/30 to-gray-900/30">
-                    <div class="text-center">
-                        <div class="text-4xl mb-2 opacity-50">
-                            <i class="fas fa-video"></i>
+            <div class="hologram-effect h-2/3 mb-3 rounded-sm overflow-hidden flex items-center justify-center bg-black">
+                <!-- Video Feed -->
+                <video class="w-full h-full object-cover" autoplay muted loop>
+                    <source src="videos/video-1.mp4" type="video/mp4">
+                    <!-- Fallback for browsers that don't support video -->
+                    <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-900/30 to-gray-900/30">
+                        <div class="text-center">
+                            <div class="text-4xl mb-2 opacity-50">
+                                <i class="fas fa-video"></i>
+                            </div>
+                            <p class="text-xs text-gray-400">SUPERVISOR FEED</p>
+                            <p class="text-xs text-gray-500">VIDEO UNAVAILABLE</p>
                         </div>
-                        <p class="text-xs text-gray-400">SUPERVISOR FEED</p>
-                        <p class="text-xs text-gray-500">ENCRYPTED CHANNEL #772B</p>
                     </div>
-                </div>
+                </video>
             </div>
             
             <div class="h-1/3">
