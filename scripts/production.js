@@ -74,8 +74,9 @@ function startProduction() {
                                 };
                                 gameState.anomalies.push(newAnomaly);
                                 
-                                logMessage(`> ANOMALY DETECTED: ${anomalyData.name}`, anomalyData.color);
+                                logMessage(anomalyData.errorLog, anomalyData.color);
                                 logMessage(`> CLICK [${anomalyData.fixButton.replace('btn-', '').toUpperCase()}] TO FIX`, anomalyData.color);
+                                updateGridCell(randomCell, 'warning');
                                 enableSupervisorGlitch();
                             } else {
                                 // Update existing anomaly's cell count

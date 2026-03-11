@@ -39,6 +39,7 @@ function spreadAnomaly(anomaly) {
                 adjCell.style.backgroundColor = cellColor;
                 adjCell.style.boxShadow = `0 0 8px ${cellColor}`;
                 adjCell.dataset.anomalyType = anomaly.type;
+                updateGridCell(adjIndex, 'warning');
                 
                 anomaly.cellCount = (anomaly.cellCount || 1) + 1;
             }
@@ -64,6 +65,7 @@ function fixAnomaly(anomaly) {
             cell.style.backgroundColor = '';
             cell.style.boxShadow = '';
             delete cell.dataset.anomalyType;
+            updateGridCell(parseInt(cell.id.replace('cell-', '')), 'active');
         }
     });
     
