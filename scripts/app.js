@@ -9,6 +9,10 @@ function initializeApplication() {
     updateProgressBars();
     updateSystemTime();
     
+    // Initialize stress meter based on initial slider values
+    gameState.stressMeterLevel = calculateStressLevel();
+    updateStressDisplay();
+    
     // Initialize social credit display with proper formatting
     const creditDisplay = document.querySelector('div > div > div.text-4xl.font-bold.text-\\[\\#00ff41\\]');
     if (creditDisplay) {
@@ -22,7 +26,7 @@ function initializeApplication() {
     
     // Start ambient effects loops
     setInterval(updateSystemTime, 1000);
-    setInterval(updateStressMeter, 50);
+    setInterval(updateStressDisplay, 100); // Updated to use math-based stress display
     
     // Log initialization messages
     logMessage('> STATION_772_B INITIALIZATION COMPLETE', '#00ff41');

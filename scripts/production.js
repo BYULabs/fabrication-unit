@@ -10,7 +10,6 @@ function startProduction() {
     gameState.anomalies = [];
     gameState.criticalAnomalies = 0;
     gameState.systemInCriticalFailure = false;
-    gameState.stressMeterSpeed = 65;
     
     logMessage('> PRODUCTION CYCLE 01: START', '#3b82f6');
     playClickSound();
@@ -66,7 +65,6 @@ function startProduction() {
             // Clear any anomalies
             gameState.anomalies = [];
             gameState.criticalAnomalies = 0;
-            gameState.stressMeterSpeed = 30;
             
             // Complete sequence
             logMessage('> SYSTEM COOLING...', '#ffb000');

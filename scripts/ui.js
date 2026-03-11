@@ -34,14 +34,24 @@ function updateSystemTime() {
     }
 }
 
-// ============= STRESS METER JITTER =============
-function updateStressMeter() {
+// ============= STRESS METER UPDATE =============
+// Update stress meter based on calculated stress level from manual overrides
+function updateStressDisplay() {
     const stressIndicator = document.querySelector('.stress-indicator');
     if (stressIndicator) {
-        const minWidth = gameState.stressMeterSpeed * 0.75;
-        const maxWidth = gameState.stressMeterSpeed * 0.82;
-        const randomWidth = minWidth + Math.random() * (maxWidth - minWidth);
-        stressIndicator.style.width = randomWidth + '%';
+        // Set width directly to stress level (0-100%)
+        stressIndicator.style.width = gameState.stressMeterLevel + '%';
+        
+        // Update color based on stress level
+        const color = getStressColor();
+        stressIndicator.style.background = `linear-gradient(90deg, ${color}, ${color}dd)`;
+        stressIndicator.style.boxShadow = `0 0 10px ${color}`;
+        
+        // Update stress meter background border color
+        const stressMeter = stressIndicator.parentElement;
+        if (stressMeter) {
+            stressMeter.style.borderColor = color;
+        }
     }
 }
 

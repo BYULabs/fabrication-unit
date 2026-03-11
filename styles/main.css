@@ -163,10 +163,11 @@ input[type="range"]::-moz-range-thumb {
 
 .stress-meter {
     height: 6px;
-    background: linear-gradient(to right, #00ff41, #ffb000, #ef4444);
+    background: #333;
     border-radius: 3px;
     position: relative;
     overflow: hidden;
+    border: 1px solid #555;
 }
 
 .stress-indicator {
@@ -177,13 +178,9 @@ input[type="range"]::-moz-range-thumb {
     width: 65%;
     background-color: #ef4444;
     box-shadow: 0 0 10px #ef4444;
-    animation: stress-pulse 2s infinite alternate;
+    transition: width 0.1s linear, background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-@keyframes stress-pulse {
-    0% { opacity: 0.8; }
-    100% { opacity: 1; }
-}
 
 .shake {
     animation: shake 0.5s;

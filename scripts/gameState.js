@@ -5,7 +5,7 @@ const gameState = {
     isProducing: false,
     socialCredit: 1245.00,
     progressValues: { bond: 0, shield: 0, isotope: 0, void: 0 },
-    stressMeterSpeed: 65,
+    stressMeterLevel: 0, // 0-100, calculated from manual overrides
     gridSize: 10,
     activeCells: new Set(),
     sliderValues: { pressure: 67, flow: 42, temp: 89, vibration: 23 },
@@ -20,6 +20,32 @@ const gameState = {
     overrideTargets: {},
     anomalyNextTrigger: null
 };
+
+// ============= STRESS CALCULATION =============
+// Calculate operator stress based on manual override values
+// Higher override values = higher system stress
+function calculateStressLevel() {
+    const { pressure, flow, temp, vibration } = gameState.sliderValues;
+    
+    // Average the four manual override values (0-100%)
+    const averageOverride = (pressure + flow + temp + vibration) / 4;
+    
+    // Apply exponential scaling so high values cause disproportionate stress
+    // This means modest overrides don't kill the operator, but extreme ones do
+    const stressLevel = Math.pow(averageOverride / 100, 1.1) * 100;
+    
+    return Math.round(stressLevel);
+}
+
+// Get stress level color based on current stress
+function getStressColor() {
+    const stress = gameState.stressMeterLevel;
+    
+    if (stress < 25) return '#00ff41';      // Green - Safe
+    if (stress < 50) return '#ffb000';      // Yellow - Caution
+    if (stress < 75) return '#ff8c42';      // Orange - Danger
+    return '#ff3333';                       // Red - Critical
+}
 
 // Anomaly type definitions
 const ANOMALY_TYPES = {

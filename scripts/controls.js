@@ -114,6 +114,12 @@ function initializeSliders() {
                 updateSocialCredit(0.05);
                 logMessage(`> ${sliderNames[slider.key]} ADJUSTED TO ${value}%`, '#ffb000');
                 
+                // ===== MATH-BASED STRESS SYSTEM =====
+                // Recalculate stress level based on new override values
+                gameState.stressMeterLevel = calculateStressLevel();
+                updateStressDisplay();
+                logMessage(`> OPERATOR STRESS LEVEL: ${gameState.stressMeterLevel}%`, getStressColor());
+                
                 // Adjust production speed based on slider average (higher slider = faster production)
                 const avgSlider = (gameState.sliderValues.pressure + gameState.sliderValues.flow + gameState.sliderValues.temp + gameState.sliderValues.vibration) / 4;
                 gameState.productionSpeed = Math.max(20, gameState.baseProductionSpeed * (1 - avgSlider / 150));
@@ -139,9 +145,8 @@ function initializeSliders() {
                     }
                 });
                 
-                // If slider hits 100%, increase stress meter and blink hazard light
-                if (value === 100) {
-                    gameState.stressMeterSpeed = Math.min(100, gameState.stressMeterSpeed + 5);
+                // If stress is critical, activate hazard light
+                if (gameState.stressMeterLevel >= 75) {
                     activateHazardLight();
                 }
             });
