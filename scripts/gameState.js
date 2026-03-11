@@ -47,6 +47,22 @@ function getStressColor() {
     return '#ff3333';                       // Red - Critical
 }
 
+// ============= PRODUCTION SPEED MULTIPLIER =============
+// Calculate production speed multiplier from manual override values
+// Higher overrides = faster production
+function getProductionSpeedMultiplier() {
+    const { pressure, flow, temp, vibration } = gameState.sliderValues;
+    
+    // Average the four manual override values
+    const averageOverride = (pressure + flow + temp + vibration) / 4;
+    
+    // Speed multiplier ranges from 0.2x (all at 0) to 3x (all at 100)
+    // This creates an exponential speed increase with overrides
+    const multiplier = 0.2 + (averageOverride / 100) * 2.8;
+    
+    return multiplier;
+}
+
 // Anomaly type definitions
 const ANOMALY_TYPES = {
     'ISOTOPE_DRIFT': {

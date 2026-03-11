@@ -25,29 +25,37 @@ function startProduction() {
     });
 
     // Production loop - fill random cells and increase progress bars
+    // Speed is dynamically adjusted based on current manual override values
     const productionInterval = setInterval(() => {
         if (!gameState.isProducing) {
             clearInterval(productionInterval);
             return;
         }
 
-        // Randomly activate cells
-        const randomCell = Math.floor(Math.random() * 100);
-        if (gameState.activeCells.size < 100) {
-            if (!gameState.activeCells.has(randomCell)) {
-                gameState.activeCells.add(randomCell);
-                const cell = document.getElementById(`cell-${randomCell}`);
-                if (cell && !cell.classList.contains('warning') && !cell.classList.contains('critical')) {
-                    cell.classList.add('active');
+        // Get current speed multiplier from manual overrides
+        const speedMultiplier = getProductionSpeedMultiplier();
+        
+        // Activate multiple cells per tick based on speed multiplier
+        const cellsToActivatePerTick = Math.ceil(speedMultiplier * 1.5);
+        for (let i = 0; i < cellsToActivatePerTick; i++) {
+            const randomCell = Math.floor(Math.random() * 100);
+            if (gameState.activeCells.size < 100) {
+                if (!gameState.activeCells.has(randomCell)) {
+                    gameState.activeCells.add(randomCell);
+                    const cell = document.getElementById(`cell-${randomCell}`);
+                    if (cell && !cell.classList.contains('warning') && !cell.classList.contains('critical')) {
+                        cell.classList.add('active');
+                    }
                 }
             }
         }
 
-        // Increase progress bars at erratic speeds
-        gameState.progressValues.bond = Math.min(100, gameState.progressValues.bond + Math.random() * 8);
-        gameState.progressValues.shield = Math.min(100, gameState.progressValues.shield + Math.random() * 6);
-        gameState.progressValues.isotope = Math.min(100, gameState.progressValues.isotope + Math.random() * 7);
-        gameState.progressValues.void = Math.min(100, gameState.progressValues.void + Math.random() * 5);
+        // Increase progress bars proportional to speed multiplier
+        // Higher overrides = faster progress
+        gameState.progressValues.bond = Math.min(100, gameState.progressValues.bond + (Math.random() * 8 * speedMultiplier));
+        gameState.progressValues.shield = Math.min(100, gameState.progressValues.shield + (Math.random() * 6 * speedMultiplier));
+        gameState.progressValues.isotope = Math.min(100, gameState.progressValues.isotope + (Math.random() * 7 * speedMultiplier));
+        gameState.progressValues.void = Math.min(100, gameState.progressValues.void + (Math.random() * 5 * speedMultiplier));
 
         // Update progress bars
         updateProgressBars();
@@ -73,7 +81,7 @@ function startProduction() {
                 resetProduction();
             }, 3000);
         }
-    }, gameState.productionSpeed);
+    }, 50);
     
     // Trigger first anomaly using anomaly interval
     const firstAnomalyDelay = gameState.anomalyInterval + (Math.random() * 3000 - 1500);

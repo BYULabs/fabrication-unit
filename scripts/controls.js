@@ -120,14 +120,17 @@ function initializeSliders() {
                 updateStressDisplay();
                 logMessage(`> OPERATOR STRESS LEVEL: ${gameState.stressMeterLevel}%`, getStressColor());
                 
-                // Adjust production speed based on slider average (higher slider = faster production)
-                const avgSlider = (gameState.sliderValues.pressure + gameState.sliderValues.flow + gameState.sliderValues.temp + gameState.sliderValues.vibration) / 4;
-                gameState.productionSpeed = Math.max(20, gameState.baseProductionSpeed * (1 - avgSlider / 150));
-                logMessage(`> PRODUCTION ACCELERATED: ${(gameState.baseProductionSpeed / gameState.productionSpeed).toFixed(2)}x SPEED`, '#3b82f6');
+                // ===== PRODUCTION SPEED MULTIPLIER =====
+                // Show current production speed multiplier
+                const speedMultiplier = getProductionSpeedMultiplier();
+                logMessage(`> PRODUCTION SPEED: ${speedMultiplier.toFixed(2)}x`, '#3b82f6');
                 
-                // Increase anomaly frequency based on slider intensity
-                gameState.anomalyInterval = Math.max(4000, gameState.baseAnomalyInterval * (1 - avgSlider / 200));
-                logMessage(`> ANOMALY DETECTION SENSITIVITY INCREASED`, '#ffb000');
+                // Display multiplier range info based on current value
+                if (speedMultiplier < 0.5) {
+                    logMessage(`> WARNING: LOW PRODUCTION SPEED. INCREASE OVERRIDES FOR FASTER OUTPUT`, '#ffb000');
+                } else if (speedMultiplier > 2.5) {
+                    logMessage(`> CAUTION: HIGH PRODUCTION SPEED. SYSTEM STRESS CRITICAL`, '#ff3333');
+                }
                 
                 // Check if any critical anomalies can be fixed by this slider
                 gameState.anomalies.forEach(anomaly => {
