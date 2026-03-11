@@ -24,6 +24,13 @@ function startProduction() {
     // Deactivate all cells
     clearGridCells();
     
+    // Clear any remaining anomalies from previous cycle
+    document.querySelectorAll('[data-anomaly-type]').forEach(cell => {
+        cell.style.backgroundColor = '';
+        cell.style.boxShadow = '';
+        delete cell.dataset.anomalyType;
+    });
+    
     // Re-enable buttons
     document.querySelectorAll('.bubble-button').forEach(btn => {
         btn.disabled = false;
