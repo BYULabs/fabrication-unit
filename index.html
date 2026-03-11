@@ -25,23 +25,49 @@
         </div>
         
         <div class="col-span-8 row-span-2 sunken-metal bg-[#1e1e20] p-3 overflow-hidden">
-            <div class="relative h-full overflow-hidden">
-                <div class="scroll-ticker whitespace-nowrap text-lg font-bold absolute top-1/2 transform -translate-y-1/2">
-                    <span class="text-[#00ff41]">PRODUCTION QUOTA: 12%</span>
-                    <span class="mx-8">|</span>
-                    <span class="text-[#3b82f6]">OXYGEN LEVELS: OPTIMAL</span>
-                    <span class="mx-8">|</span>
-                    <span class="text-[#ffb000]">CITIZEN STATUS: COMPLIANT</span>
-                    <span class="mx-8">|</span>
-                    <span class="text-[#00ff41]">TEMPERATURE: 22.4°C</span>
-                    <span class="mx-8">|</span>
-                    <span class="text-[#3b82f6]">POWER DRAW: 87%</span>
-                    <span class="mx-8">|</span>
-                    <span class="text-[#ffb000]">WASTE PROCESSING: ACTIVE</span>
-                    <span class="mx-8">|</span>
-                    <span class="text-[#00ff41]">SECURITY LEVEL: ALPHA</span>
-                    <span class="mx-8">|</span>
-                    <span class="text-[#3b82f6]">HEX: 0xA1F3C8 | 0xB2E45D | 0xC9F0A2</span>
+            <div class="relative h-full overflow-hidden flex items-center justify-around">
+                <!-- Factory Meter 1: NUCLEAR REACTOR OUTPUT -->
+                <div class="meter-container text-center">
+                    <div class="speedometer">
+                        <div class="gauge-scale low"></div>
+                        <div class="gauge-scale middle"></div>
+                        <div class="gauge-scale high"></div>
+                        <div id="meter-nuclear-arrow" class="gauge-arrow"></div>
+                    </div>
+                    <div id="meter-nuclear-value" class="text-gray-300 text-xs pt-2 font-mono">NUCLEAR: 23%</div>
+                </div>
+
+                <!-- Factory Meter 2: COOLING SYSTEM -->
+                <div class="meter-container text-center">
+                    <div class="speedometer">
+                        <div class="gauge-scale low"></div>
+                        <div class="gauge-scale middle"></div>
+                        <div class="gauge-scale high"></div>
+                        <div id="meter-coolant-arrow" class="gauge-arrow"></div>
+                    </div>
+                    <div id="meter-coolant-value" class="text-gray-300 text-xs pt-2 font-mono">COOLANT: 45%</div>
+                </div>
+
+                <!-- Factory Meter 3: RADIATION LEVELS -->
+                <div class="meter-container text-center">
+                    <div class="speedometer">
+                        <div class="gauge-scale low"></div>
+                        <div class="gauge-scale middle"></div>
+                        <div class="gauge-scale high"></div>
+                        <div id="meter-radiation-arrow" class="gauge-arrow"></div>
+                    </div>
+                    <div id="meter-radiation-value" class="text-gray-300 text-xs pt-2 font-mono">RADIATION: 34%</div>
+                </div>
+
+                <!-- Factory Meter 4: SYSTEM STABILITY -->
+                <div class="meter-container text-center">
+                    <div class="speedometer">
+                        <div class="gauge-scale low"></div>
+                        <div class="gauge-scale middle"></div>
+                        <div class="gauge-scale high"></div>
+                        <div id="meter-stability-arrow" class="gauge-arrow"></div>
+                    </div>
+                    <div id="meter-stability-value" class="text-gray-300 text-xs pt-2 font-mono">STABILITY: 78%</div>
                 </div>
             </div>
         </div>
@@ -329,6 +355,7 @@
     <script src="scripts/anomaly.js"></script>
     <script src="scripts/production.js"></script>
     <script src="scripts/controls.js"></script>
+    <script src="scripts/meters.js"></script>
     <script src="scripts/app.js"></script>
 </body>
 </html>

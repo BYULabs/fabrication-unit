@@ -67,6 +67,11 @@ function spreadAnomaly(anomaly) {
     
     // Check if warning threshold exceeded after spread
     checkWarningThreshold();
+    
+    // Update meters based on anomaly count
+    if (typeof updateMetersFromAnomalies === 'function') {
+        updateMetersFromAnomalies();
+    }
 }
 
 function fixAnomaly(anomaly) {

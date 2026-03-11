@@ -98,6 +98,11 @@ function startProduction() {
                             
                             // Check if warning threshold exceeded after anomaly creation
                             checkWarningThreshold();
+                            
+                            // Update meters based on anomaly count
+                            if (typeof updateMetersFromAnomalies === 'function') {
+                                updateMetersFromAnomalies();
+                            }
                         }
                     }
                 }
