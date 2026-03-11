@@ -6,178 +6,7 @@
     <title>STATION_772_B Industrial Control Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
-        
-        body {
-            font-family: 'Share Tech Mono', monospace;
-        }
-        
-        .sunken-metal {
-            border-width: 4px;
-            border-style: solid;
-            border-top-color: rgba(0, 0, 0, 0.8);
-            border-left-color: rgba(0, 0, 0, 0.8);
-            border-bottom-color: rgba(255, 255, 255, 0.1);
-            border-right-color: rgba(255, 255, 255, 0.1);
-            box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.5);
-        }
-        
-        .pulse {
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.7; }
-            100% { opacity: 1; }
-        }
-        
-        .jitter {
-            animation: jitter 0.5s infinite alternate;
-        }
-        
-        @keyframes jitter {
-            0% { transform: translateX(-1px); }
-            25% { transform: translateX(1px); }
-            50% { transform: translateX(-2px); }
-            75% { transform: translateX(2px); }
-            100% { transform: translateX(-1px); }
-        }
-        
-        .hologram-effect {
-            opacity: 0.7;
-            filter: blur(0.5px);
-            background: linear-gradient(to bottom, rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0.3));
-        }
-        
-        .scroll-ticker {
-            animation: scroll-left 30s linear infinite;
-        }
-        
-        @keyframes scroll-left {
-            0% { transform: translateX(100%); }
-            100% { transform: translateX(-100%); }
-        }
-        
-        .bubble-button {
-            border-radius: 50%;
-            box-shadow: 
-                inset 0 -5px 10px rgba(0, 0, 0, 0.5),
-                0 5px 15px rgba(0, 0, 0, 0.7),
-                0 0 0 4px rgba(0, 0, 0, 0.3);
-            transition: all 0.1s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .bubble-button:active {
-            transform: translateY(3px);
-            box-shadow: 
-                inset 0 -2px 5px rgba(0, 0, 0, 0.5),
-                0 2px 5px rgba(0, 0, 0, 0.5),
-                0 0 0 4px rgba(0, 0, 0, 0.3);
-        }
-        
-        input[type="range"] {
-            -webkit-appearance: none;
-            appearance: none;
-            background: transparent;
-            cursor: pointer;
-            width: 100%;
-            height: 20px;
-        }
-        
-        input[type="range"]::-webkit-slider-track {
-            background: #333;
-            height: 8px;
-            border-radius: 4px;
-            border: 1px solid #555;
-        }
-        
-        input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            height: 24px;
-            width: 16px;
-            background-color: #ffb000;
-            border-radius: 3px;
-            border: 2px solid #000;
-            box-shadow: 0 0 5px #ffb000;
-            margin-top: -8px;
-        }
-        
-        input[type="range"]::-moz-range-track {
-            background: #333;
-            height: 8px;
-            border-radius: 4px;
-            border: 1px solid #555;
-        }
-        
-        input[type="range"]::-moz-range-thumb {
-            height: 24px;
-            width: 16px;
-            background-color: #ffb000;
-            border-radius: 3px;
-            border: 2px solid #000;
-            box-shadow: 0 0 5px #ffb000;
-        }
-        
-        .progress-bar {
-            height: 12px;
-            background: #333;
-            border-radius: 2px;
-            overflow: hidden;
-            position: relative;
-        }
-        
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(to right, #00ff41, #00cc33);
-            border-radius: 2px;
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
-        
-        .grid-cell {
-            width: 100%;
-            height: 100%;
-            background-color: #2a2a2c;
-            border: 1px solid #333;
-            transition: all 0.3s;
-        }
-        
-        .grid-cell.active {
-            background-color: #00ff41;
-            box-shadow: 0 0 8px #00ff41;
-        }
-        
-        .stress-meter {
-            height: 6px;
-            background: linear-gradient(to right, #00ff41, #ffb000, #ef4444);
-            border-radius: 3px;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .stress-indicator {
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 100%;
-            width: 65%;
-            background-color: #ef4444;
-            box-shadow: 0 0 10px #ef4444;
-            animation: stress-pulse 2s infinite alternate;
-        }
-        
-        @keyframes stress-pulse {
-            0% { opacity: 0.8; }
-            100% { opacity: 1; }
-        }
-    </style>
+    <link rel="stylesheet" href="styles/main.css">
 </head>
 <body class="h-screen w-screen overflow-hidden bg-[#0f0f10] text-white p-2">
     <!-- 12x12 Grid Container -->
@@ -309,23 +138,11 @@
                 <span class="text-xs text-gray-400">REAL-TIME</span>
             </div>
             
-            <div class="grid grid-cols-10 grid-rows-1 gap-1 h-2/3 mb-4">
-                <!-- Generate 10x10 grid cells -->
-                <div class="grid-cell" id="cell-0"></div>
-                <div class="grid-cell" id="cell-1"></div>
-                <div class="grid-cell" id="cell-2"></div>
-                <div class="grid-cell" id="cell-3"></div>
-                <div class="grid-cell active" id="cell-4"></div>
-                <div class="grid-cell" id="cell-5"></div>
-                <div class="grid-cell" id="cell-6"></div>
-                <div class="grid-cell" id="cell-7"></div>
-                <div class="grid-cell" id="cell-8"></div>
-                <div class="grid-cell" id="cell-9"></div>
-                
-                <!-- More cells would be generated with JavaScript -->
+            <div class="grid grid-cols-10 grid-rows-10 gap-1 h-2/3 mb-4" id="assembly-grid">
+                <!-- 10x10 grid cells will be generated with JavaScript -->
             </div>
             
-            <div class="grid grid-cols-2 gap-3 h-1/3">
+            <div class="grid grid-cols-2 gap-3 h-1/4">
                 <!-- Progress Bar 1 -->
                 <div>
                     <div class="flex justify-between mb-1">
@@ -380,16 +197,16 @@
             </div>
             
             <div class="grid grid-cols-3 grid-rows-2 gap-4 h-[calc(100%-3rem)]">
-                <!-- Bubble Button 1 -->
-                <button class="bubble-button bg-gradient-to-b from-red-600 to-red-800 text-white">
+                <!-- Bubble Button 1: INITIATE/START -->
+                <button id="btn-initiate" class="bubble-button bg-gradient-to-b from-red-600 to-red-800 text-white">
                     <div class="text-center">
-                        <div class="text-lg font-bold">EMERGENCY</div>
-                        <div class="text-xs">SHUTDOWN</div>
+                        <div class="text-lg font-bold">INITIATE</div>
+                        <div class="text-xs">START CYCLE</div>
                     </div>
                 </button>
                 
                 <!-- Bubble Button 2 -->
-                <button class="bubble-button bg-gradient-to-b from-green-600 to-green-800 text-white">
+                <button id="btn-nuclear" class="bubble-button bg-gradient-to-b from-green-600 to-green-800 text-white">
                     <div class="text-center">
                         <div class="text-lg font-bold">NUCLEAR</div>
                         <div class="text-xs">IGNITION</div>
@@ -397,15 +214,15 @@
                 </button>
                 
                 <!-- Bubble Button 3 -->
-                <button class="bubble-button bg-gradient-to-b from-orange-600 to-orange-800 text-white">
+                <button id="btn-emergency" class="bubble-button bg-gradient-to-b from-orange-600 to-orange-800 text-white">
                     <div class="text-center">
-                        <div class="text-lg font-bold">CAUTION</div>
-                        <div class="text-xs">OVERRIDE</div>
+                        <div class="text-lg font-bold">EMERGENCY</div>
+                        <div class="text-xs">SHUTDOWN</div>
                     </div>
                 </button>
                 
                 <!-- Bubble Button 4 -->
-                <button class="bubble-button bg-gradient-to-b from-blue-600 to-blue-800 text-white">
+                <button id="btn-coolant" class="bubble-button bg-gradient-to-b from-blue-600 to-blue-800 text-white">
                     <div class="text-center">
                         <div class="text-lg font-bold">COOLANT</div>
                         <div class="text-xs">RELEASE</div>
@@ -413,7 +230,7 @@
                 </button>
                 
                 <!-- Bubble Button 5 -->
-                <button class="bubble-button bg-gradient-to-b from-purple-600 to-purple-800 text-white">
+                <button id="btn-stasis" class="bubble-button bg-gradient-to-b from-purple-600 to-purple-800 text-white">
                     <div class="text-center">
                         <div class="text-lg font-bold">STASIS</div>
                         <div class="text-xs">FIELD</div>
@@ -421,7 +238,7 @@
                 </button>
                 
                 <!-- Bubble Button 6 -->
-                <button class="bubble-button bg-gradient-to-b from-yellow-600 to-yellow-800 text-black">
+                <button id="btn-auxiliary" class="bubble-button bg-gradient-to-b from-yellow-600 to-yellow-800 text-black">
                     <div class="text-center">
                         <div class="text-lg font-bold">AUXILIARY</div>
                         <div class="text-xs">POWER</div>
@@ -471,15 +288,15 @@
             
             <div class="h-[calc(100%-4rem)] flex flex-col justify-between">
                 <!-- Depressing Buttons -->
-                <button class="w-full py-3 bg-[#2a2a2c] text-gray-400 sunken-metal text-sm hover:bg-[#333] transition-colors">
+                <button id="btn-request-ration" class="w-full py-3 bg-[#2a2a2c] text-gray-400 sunken-metal text-sm hover:bg-[#333] transition-colors">
                     [REQUEST RATION]
                 </button>
                 
-                <button class="w-full py-3 bg-[#2a2a2c] text-gray-400 sunken-metal text-sm hover:bg-[#333] transition-colors">
+                <button id="btn-report-coworker" class="w-full py-3 bg-[#2a2a2c] text-gray-400 sunken-metal text-sm hover:bg-[#333] transition-colors">
                     [REPORT CO-WORKER]
                 </button>
                 
-                <button class="w-full py-3 bg-[#2a2a2c] text-red-400 sunken-metal text-sm hover:bg-[#333] transition-colors">
+                <button id="btn-end-shift" class="w-full py-3 bg-[#2a2a2c] text-red-400 sunken-metal text-sm hover:bg-[#333] transition-colors">
                     [END SHIFT]
                 </button>
                 
@@ -503,114 +320,15 @@
         </div>
     </div>
 
-    <script>
-        // Slider value updates
-        const pressureSlider = document.getElementById('pressure-slider');
-        const flowSlider = document.getElementById('flow-slider');
-        const tempSlider = document.getElementById('temp-slider');
-        const vibrationSlider = document.getElementById('vibration-slider');
-        
-        const pressureValue = document.getElementById('pressure-value');
-        const flowValue = document.getElementById('flow-value');
-        const tempValue = document.getElementById('temp-value');
-        const vibrationValue = document.getElementById('vibration-value');
-        
-        pressureSlider.addEventListener('input', function() {
-            pressureValue.textContent = this.value + '%';
-        });
-        
-        flowSlider.addEventListener('input', function() {
-            flowValue.textContent = this.value + '%';
-        });
-        
-        tempSlider.addEventListener('input', function() {
-            tempValue.textContent = this.value + '%';
-        });
-        
-        vibrationSlider.addEventListener('input', function() {
-            vibrationValue.textContent = this.value + '%';
-        });
-        
-        // Dynamic grid cell activation
-        function activateRandomCell() {
-            const cells = document.querySelectorAll('.grid-cell');
-            // Deactivate all cells
-            cells.forEach(cell => {
-                cell.classList.remove('active');
-            });
-            
-            // Activate random cells
-            const activeCount = Math.floor(Math.random() * 5) + 3;
-            for (let i = 0; i < activeCount; i++) {
-                const randomIndex = Math.floor(Math.random() * cells.length);
-                cells[randomIndex].classList.add('active');
-            }
-        }
-        
-        // Progress bar animations
-        function updateProgressBars() {
-            const bondFill = document.getElementById('bond-fill');
-            const shieldFill = document.getElementById('shield-fill');
-            const isotopeFill = document.getElementById('isotope-fill');
-            const voidFill = document.getElementById('void-fill');
-            
-            const bondProgress = document.getElementById('bond-progress');
-            const shieldProgress = document.getElementById('shield-progress');
-            const isotopeProgress = document.getElementById('isotope-progress');
-            const voidProgress = document.getElementById('void-progress');
-            
-            // Randomize progress values slightly
-            const bondValue = Math.min(100, Math.max(0, 87 + Math.floor(Math.random() * 6) - 3));
-            const shieldValue = Math.min(100, Math.max(0, 64 + Math.floor(Math.random() * 6) - 3));
-            const isotopeValue = Math.min(100, Math.max(0, 42 + Math.floor(Math.random() * 6) - 3));
-            const voidValue = Math.min(100, Math.max(0, 29 + Math.floor(Math.random() * 6) - 3));
-            
-            bondFill.style.width = bondValue + '%';
-            shieldFill.style.width = shieldValue + '%';
-            isotopeFill.style.width = isotopeValue + '%';
-            voidFill.style.width = voidValue + '%';
-            
-            bondProgress.textContent = bondValue + '%';
-            shieldProgress.textContent = shieldValue + '%';
-            isotopeProgress.textContent = isotopeValue + '%';
-            voidProgress.textContent = voidValue + '%';
-        }
-        
-        // Bubble button interactions
-        const bubbleButtons = document.querySelectorAll('.bubble-button');
-        bubbleButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                // Add a click effect
-                this.style.transform = 'translateY(3px)';
-                setTimeout(() => {
-                    this.style.transform = '';
-                }, 100);
-                
-                // Log the action
-                const logDiv = document.querySelector('.overflow-y-auto');
-                const time = new Date();
-                const timeString = `[${time.getHours().toString().padStart(2, '0')}:${time.getMinutes().toString().padStart(2, '0')}:${time.getSeconds().toString().padStart(2, '0')}]`;
-                const action = this.textContent.trim().replace(/\s+/g, ' ');
-                
-                const logEntry = document.createElement('p');
-                logEntry.className = 'text-[#ffb000]';
-                logEntry.textContent = `${timeString} OPERATOR ACTION: ${action}`;
-                
-                logDiv.prepend(logEntry);
-                
-                // Keep log at reasonable length
-                if (logDiv.children.length > 20) {
-                    logDiv.removeChild(logDiv.lastChild);
-                }
-            });
-        });
-        
-        // Initialize animations
-        setInterval(activateRandomCell, 2000);
-        setInterval(updateProgressBars, 3000);
-        
-        // Initialize with random cells
-        activateRandomCell();
-    </script>
+    <!-- External Script Files -->
+    <script src="scripts/gameState.js"></script>
+    <script src="scripts/audio.js"></script>
+    <script src="scripts/grid.js"></script>
+    <script src="scripts/logging.js"></script>
+    <script src="scripts/ui.js"></script>
+    <script src="scripts/production.js"></script>
+    <script src="scripts/anomaly.js"></script>
+    <script src="scripts/controls.js"></script>
+    <script src="scripts/app.js"></script>
 </body>
 </html>

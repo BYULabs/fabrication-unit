@@ -1,0 +1,245 @@
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+body {
+    font-family: 'Share Tech Mono', monospace;
+}
+
+.sunken-metal {
+    border-width: 4px;
+    border-style: solid;
+    border-top-color: rgba(0, 0, 0, 0.8);
+    border-left-color: rgba(0, 0, 0, 0.8);
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+    border-right-color: rgba(255, 255, 255, 0.1);
+    box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.pulse {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.7; }
+    100% { opacity: 1; }
+}
+
+.jitter {
+    animation: jitter 0.5s infinite alternate;
+}
+
+@keyframes jitter {
+    0% { transform: translateX(-1px); }
+    25% { transform: translateX(1px); }
+    50% { transform: translateX(-2px); }
+    75% { transform: translateX(2px); }
+    100% { transform: translateX(-1px); }
+}
+
+.hologram-effect {
+    opacity: 0.7;
+    filter: blur(0.5px);
+    background: linear-gradient(to bottom, rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0.3));
+}
+
+.scroll-ticker {
+    animation: scroll-left 30s linear infinite;
+}
+
+@keyframes scroll-left {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+}
+
+.bubble-button {
+    border-radius: 50%;
+    box-shadow: 
+        inset 0 -5px 10px rgba(0, 0, 0, 0.5),
+        0 5px 15px rgba(0, 0, 0, 0.7),
+        0 0 0 4px rgba(0, 0, 0, 0.3);
+    transition: all 0.1s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bubble-button:active {
+    transform: translateY(3px);
+    box-shadow: 
+        inset 0 -2px 5px rgba(0, 0, 0, 0.5),
+        0 2px 5px rgba(0, 0, 0, 0.5),
+        0 0 0 4px rgba(0, 0, 0, 0.3);
+}
+
+input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent;
+    cursor: pointer;
+    width: 100%;
+    height: 20px;
+}
+
+input[type="range"]::-webkit-slider-track {
+    background: #333;
+    height: 8px;
+    border-radius: 4px;
+    border: 1px solid #555;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 24px;
+    width: 16px;
+    background-color: #ffb000;
+    border-radius: 3px;
+    border: 2px solid #000;
+    box-shadow: 0 0 5px #ffb000;
+    margin-top: -8px;
+}
+
+input[type="range"]::-moz-range-track {
+    background: #333;
+    height: 8px;
+    border-radius: 4px;
+    border: 1px solid #555;
+}
+
+input[type="range"]::-moz-range-thumb {
+    height: 24px;
+    width: 16px;
+    background-color: #ffb000;
+    border-radius: 3px;
+    border: 2px solid #000;
+    box-shadow: 0 0 5px #ffb000;
+}
+
+.progress-bar {
+    height: 12px;
+    background: #333;
+    border-radius: 2px;
+    overflow: hidden;
+    position: relative;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(to right, #00ff41, #00cc33);
+    border-radius: 2px;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.grid-cell {
+    width: 100%;
+    height: 100%;
+    background-color: #2a2a2c;
+    border: 1px solid #333;
+    transition: all 0.3s;
+}
+
+.grid-cell.active {
+    background-color: #00ff41;
+    box-shadow: 0 0 8px #00ff41;
+}
+
+.grid-cell.warning {
+    background-color: #ffb000;
+    box-shadow: 0 0 8px #ffb000;
+}
+
+.grid-cell.critical {
+    background-color: #ef4444;
+    box-shadow: inset 0 0 8px #ef4444;
+    animation: critical-pulse 0.3s infinite alternate;
+}
+
+@keyframes critical-pulse {
+    0% { opacity: 1; }
+    100% { opacity: 0.6; }
+}
+
+.stress-meter {
+    height: 6px;
+    background: linear-gradient(to right, #00ff41, #ffb000, #ef4444);
+    border-radius: 3px;
+    position: relative;
+    overflow: hidden;
+}
+
+.stress-indicator {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 65%;
+    background-color: #ef4444;
+    box-shadow: 0 0 10px #ef4444;
+    animation: stress-pulse 2s infinite alternate;
+}
+
+@keyframes stress-pulse {
+    0% { opacity: 0.8; }
+    100% { opacity: 1; }
+}
+
+.shake {
+    animation: shake 0.5s;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10% { transform: translateX(-5px); }
+    20% { transform: translateX(5px); }
+    30% { transform: translateX(-5px); }
+    40% { transform: translateX(5px); }
+    50% { transform: translateX(-5px); }
+    60% { transform: translateX(5px); }
+    70% { transform: translateX(-5px); }
+    80% { transform: translateX(5px); }
+    90% { transform: translateX(-5px); }
+}
+
+.hazard-light {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: #666;
+    margin: 4px;
+}
+
+.hazard-light.blink {
+    animation: blink 0.5s infinite;
+    background-color: #ff0000;
+    box-shadow: 0 0 10px #ff0000;
+}
+
+@keyframes blink {
+    0%, 49%, 100% { opacity: 1; }
+    50%, 99% { opacity: 0.3; }
+}
+
+.screen-flash {
+    animation: flash 0.15s;
+}
+
+@keyframes flash {
+    0% { background-color: transparent; }
+    50% { background-color: rgba(239, 68, 68, 0.4); }
+    100% { background-color: transparent; }
+}
+
+.glitch {
+    position: relative;
+    animation: glitch-animation 0.2s infinite;
+}
+
+@keyframes glitch-animation {
+    0% { transform: translateX(0px) translateY(0px); filter: blur(0px); }
+    25% { transform: translateX(-2px) translateY(1px); filter: blur(0.5px); }
+    50% { transform: translateX(2px) translateY(-1px); filter: blur(0px); }
+    75% { transform: translateX(-1px) translateY(2px); filter: blur(0.5px); }
+    100% { transform: translateX(0px) translateY(0px); filter: blur(0px); }
+}
