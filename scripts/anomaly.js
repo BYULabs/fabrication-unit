@@ -112,16 +112,40 @@ function triggerCriticalFailure() {
     gameState.systemInCriticalFailure = true;
     logMessage('> CRITICAL FAILURE IMMINENT. EMERGENCY SHUTDOWN ADVISED.', '#ef4444');
     
-    // Screen flash red repeatedly
-    let flashCount = 0;
-    const flashInterval = setInterval(() => {
-        document.body.classList.toggle('screen-flash');
-        flashCount++;
-        if (flashCount > 20 || !gameState.systemInCriticalFailure) {
-            clearInterval(flashInterval);
-            document.body.classList.remove('screen-flash');
+    // Progressively expand red from border inward
+    let layer = 0;
+    const maxLayers = Math.ceil(gameState.gridSize / 2);
+    
+    const expandInterval = setInterval(() => {
+        if (!gameState.systemInCriticalFailure) {
+            clearInterval(expandInterval);
+            return;
         }
-    }, 200);
+        
+        // Apply critical class to current layer
+        for (let i = 0; i < gameState.gridSize * gameState.gridSize; i++) {
+            const row = Math.floor(i / gameState.gridSize);
+            const col = i % gameState.gridSize;
+            
+            // Calculate distance from edge (minimum distance to any border)
+            const distFromEdge = Math.min(row, col, gameState.gridSize - 1 - row, gameState.gridSize - 1 - col);
+            
+            // If this cell is at the current layer distance from edge, highlight it
+            if (distFromEdge === layer) {
+                const cell = document.getElementById(`cell-${i}`);
+                if (cell) {
+                    cell.classList.add('critical');
+                }
+            }
+        }
+        
+        layer++;
+        
+        // Stop when we've covered all layers
+        if (layer >= maxLayers) {
+            clearInterval(expandInterval);
+        }
+    }, 200); // Expand every 200ms
     
     // Stress meter maxes out
     gameState.stressMeterSpeed = 100;

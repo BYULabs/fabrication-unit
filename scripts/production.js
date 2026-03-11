@@ -15,6 +15,11 @@ function startProduction() {
     playClickSound();
     updateSocialCredit(10.00);
     
+    // Remove critical warnings from grid
+    document.querySelectorAll('.grid-cell.critical').forEach(cell => {
+        cell.classList.remove('critical');
+    });
+    
     // Deactivate all cells
     clearGridCells();
     
@@ -182,6 +187,11 @@ function emergencyShutdown() {
         cell.style.boxShadow = '';
         delete cell.dataset.anomalyType;
         updateGridCell(parseInt(cell.id.replace('cell-', '')), 'active');
+    });
+    
+    // Remove critical warnings from grid
+    document.querySelectorAll('.grid-cell.critical').forEach(cell => {
+        cell.classList.remove('critical');
     });
     
     // Clear production intervals
