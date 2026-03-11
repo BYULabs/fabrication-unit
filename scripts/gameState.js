@@ -3,7 +3,7 @@
 
 const gameState = {
     isProducing: false,
-    socialCredit: 1245.00,
+    socialCredit: 0.00,
     progressValues: { bond: 0, shield: 0, isotope: 0, void: 0 },
     stressMeterLevel: 0, // 0-100, calculated from manual overrides
     gridSize: 10,

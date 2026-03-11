@@ -5,7 +5,7 @@ function initializeControls() {
     // INITIATE button - Start production cycle
     document.getElementById('btn-initiate')?.addEventListener('click', function() {
         playClickSound();
-        updateSocialCredit(0.50);
+        updateSocialCredit(-1500);
         logMessage('> OPERATOR ACTION: INITIATE START CYCLE', '#ffb000');
         startProduction();
     });
@@ -19,9 +19,9 @@ function initializeControls() {
 
     // REQUEST RATION button
     document.getElementById('btn-request-ration')?.addEventListener('click', function() {
-        playBuzzerSound();
-        updateSocialCredit(-0.25);
-        logMessage('> ACCESS DENIED. WORK UNFINISHED.', '#ef4444');
+        playClickSound();
+        updateSocialCredit(3000);
+        logMessage('> RATION REQUEST APPROVED. CREDITS AWARDED.', '#00ff41');
     });
 
     // END SHIFT button
@@ -43,7 +43,7 @@ function initializeControls() {
     document.getElementById('btn-nuclear')?.addEventListener('click', function() {
         playClickSound();
         logMessage('> OPERATOR ACTION: NUCLEAR IGNITION', '#ffb000');
-        updateSocialCredit(0.75);
+        updateSocialCredit(-100);
         
         // Find and fix THERMAL_DISCONTINUITY anomaly
         const anomaly = gameState.anomalies.find(a => a.type === 'THERMAL_DISCONTINUITY' && a.isActive);
@@ -57,7 +57,7 @@ function initializeControls() {
     document.getElementById('btn-stasis')?.addEventListener('click', function() {
         playClickSound();
         logMessage('> OPERATOR ACTION: STASIS FIELD', '#ffb000');
-        updateSocialCredit(0.75);
+        updateSocialCredit(-120);
         
         // Find and fix ISOTOPE_DRIFT anomaly
         const anomaly = gameState.anomalies.find(a => a.type === 'ISOTOPE_DRIFT' && a.isActive);
@@ -71,7 +71,7 @@ function initializeControls() {
     document.getElementById('btn-coolant')?.addEventListener('click', function() {
         playClickSound();
         logMessage('> OPERATOR ACTION: COOLANT RELEASE', '#ffb000');
-        updateSocialCredit(0.75);
+        updateSocialCredit(-150);
         
         // Find and fix PRESSURE_CASCADE anomaly
         const anomaly = gameState.anomalies.find(a => a.type === 'PRESSURE_CASCADE' && a.isActive);
@@ -85,7 +85,7 @@ function initializeControls() {
     document.getElementById('btn-auxiliary')?.addEventListener('click', function() {
         playClickSound();
         logMessage('> OPERATOR ACTION: AUXILIARY POWER', '#ffb000');
-        updateSocialCredit(0.75);
+        updateSocialCredit(-180);
         
         // Find and fix VOID_DESTABILIZATION anomaly
         const anomaly = gameState.anomalies.find(a => a.type === 'VOID_DESTABILIZATION' && a.isActive);

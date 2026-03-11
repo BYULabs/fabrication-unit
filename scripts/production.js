@@ -131,6 +131,7 @@ function startProduction() {
             logMessage('> SYSTEM COOLING...', '#ffb000');
             setTimeout(() => {
                 logMessage('> UNIT COMPLETE. QUOTA UPDATED.', '#00ff41');
+                updateSocialCredit(2000);
                 resetProduction();
             }, 3000);
         }

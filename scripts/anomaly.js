@@ -95,8 +95,6 @@ function fixAnomaly(anomaly) {
         gameState.anomalies = gameState.anomalies.filter(a => a.id !== anomaly.id);
     }
     
-    updateSocialCredit(5.50);
-    
     // Disable glitch if no more active anomalies
     if (gameState.anomalies.filter(a => a.isActive).length === 0) {
         disableSupervisorGlitch();
