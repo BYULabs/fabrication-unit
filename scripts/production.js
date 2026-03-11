@@ -35,6 +35,9 @@ function startProduction() {
         // Get current speed multiplier from manual overrides
         const speedMultiplier = getProductionSpeedMultiplier();
         
+        // Get anomaly probability - higher overrides = more anomalous cells
+        const anomalyProbability = getAnomalyProbability();
+        
         // Activate multiple cells per tick based on speed multiplier
         const cellsToActivatePerTick = Math.ceil(speedMultiplier * 1.5);
         for (let i = 0; i < cellsToActivatePerTick; i++) {
@@ -43,8 +46,42 @@ function startProduction() {
                 if (!gameState.activeCells.has(randomCell)) {
                     gameState.activeCells.add(randomCell);
                     const cell = document.getElementById(`cell-${randomCell}`);
-                    if (cell && !cell.classList.contains('warning') && !cell.classList.contains('critical')) {
+                    if (cell) {
                         cell.classList.add('active');
+                        
+                        // Determine if this cell should be anomalous
+                        if (Math.random() < anomalyProbability) {
+                            // This cell is anomalous - pick a random anomaly type
+                            const anomalyType = getRandomAnomalyType();
+                            const anomalyData = ANOMALY_TYPES[anomalyType];
+                            const cellColor = ANOMALY_COLORS[anomalyType];
+                            
+                            // Apply anomaly colors to cell
+                            cell.style.backgroundColor = cellColor;
+                            cell.style.boxShadow = `0 0 8px ${cellColor}`;
+                            cell.dataset.anomalyType = anomalyType;
+                            
+                            // Create anomaly record if one doesn't exist for this type
+                            const existingAnomaly = gameState.anomalies.find(a => a.type === anomalyType && a.isActive);
+                            if (!existingAnomaly) {
+                                const anomalyId = Date.now() + Math.random();
+                                const newAnomaly = {
+                                    id: anomalyId,
+                                    type: anomalyType,
+                                    startTime: Date.now(),
+                                    isActive: true,
+                                    cellCount: 1
+                                };
+                                gameState.anomalies.push(newAnomaly);
+                                
+                                logMessage(`> ANOMALY DETECTED: ${anomalyData.name}`, anomalyData.color);
+                                logMessage(`> CLICK [${anomalyData.fixButton.replace('btn-', '').toUpperCase()}] TO FIX`, anomalyData.color);
+                                enableSupervisorGlitch();
+                            } else {
+                                // Update existing anomaly's cell count
+                                existingAnomaly.cellCount = (existingAnomaly.cellCount || 1) + 1;
+                            }
+                        }
                     }
                 }
             }
@@ -88,20 +125,14 @@ function startProduction() {
             }, 3000);
         }
     }, 50);
-    
-    // Trigger first anomaly using anomaly interval
-    const firstAnomalyDelay = gameState.anomalyInterval + (Math.random() * 3000 - 1500);
-    gameState.anomalyNextTrigger = setTimeout(() => {
-        if (gameState.isProducing) {
-            triggerAnomaly();
-        }
-    }, firstAnomalyDelay);
 }
 
 function resetProduction() {
     // Clear grid
     document.querySelectorAll('.grid-cell').forEach(cell => {
         cell.classList.remove('active');
+        cell.style.backgroundColor = '';
+        cell.style.boxShadow = '';
     });
     gameState.activeCells.clear();
     
@@ -118,21 +149,6 @@ function emergencyShutdown() {
     gameState.systemInCriticalFailure = false;
     gameState.anomalies = [];
     gameState.criticalAnomalies = 0;
-    gameState.stressMeterSpeed = 30;
-    gameState.productionSpeed = gameState.baseProductionSpeed;
-    gameState.anomalyInterval = gameState.baseAnomalyInterval;
-    
-    // Clear all anomaly timers
-    Object.keys(gameState.anomalyTimers).forEach(key => {
-        clearTimeout(gameState.anomalyTimers[key]);
-    });
-    gameState.anomalyTimers = {};
-    
-    // Clear next anomaly trigger
-    if (gameState.anomalyNextTrigger) {
-        clearTimeout(gameState.anomalyNextTrigger);
-        gameState.anomalyNextTrigger = null;
-    }
     
     // Reset grid
     resetProduction();

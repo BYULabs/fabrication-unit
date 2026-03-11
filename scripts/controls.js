@@ -46,9 +46,11 @@ function initializeControls() {
         updateSocialCredit(0.75);
         
         // Find and fix THERMAL_DISCONTINUITY anomaly
-        const anomaly = gameState.anomalies.find(a => a.type === 'THERMAL_DISCONTINUITY');
+        const anomaly = gameState.anomalies.find(a => a.type === 'THERMAL_DISCONTINUITY' && a.isActive);
         if (anomaly) {
             fixAnomaly(anomaly);
+        } else {
+            logMessage('> NO ACTIVE ANOMALY TO FIX', '#ff8c42');
         }
     });
 
@@ -58,9 +60,11 @@ function initializeControls() {
         updateSocialCredit(0.75);
         
         // Find and fix ISOTOPE_DRIFT anomaly
-        const anomaly = gameState.anomalies.find(a => a.type === 'ISOTOPE_DRIFT');
+        const anomaly = gameState.anomalies.find(a => a.type === 'ISOTOPE_DRIFT' && a.isActive);
         if (anomaly) {
             fixAnomaly(anomaly);
+        } else {
+            logMessage('> NO ACTIVE ANOMALY TO FIX', '#ff8c42');
         }
     });
 
@@ -70,9 +74,11 @@ function initializeControls() {
         updateSocialCredit(0.75);
         
         // Find and fix PRESSURE_CASCADE anomaly
-        const anomaly = gameState.anomalies.find(a => a.type === 'PRESSURE_CASCADE');
+        const anomaly = gameState.anomalies.find(a => a.type === 'PRESSURE_CASCADE' && a.isActive);
         if (anomaly) {
             fixAnomaly(anomaly);
+        } else {
+            logMessage('> NO ACTIVE ANOMALY TO FIX', '#ff8c42');
         }
     });
 
@@ -82,9 +88,11 @@ function initializeControls() {
         updateSocialCredit(0.75);
         
         // Find and fix VOID_DESTABILIZATION anomaly
-        const anomaly = gameState.anomalies.find(a => a.type === 'VOID_DESTABILIZATION');
+        const anomaly = gameState.anomalies.find(a => a.type === 'VOID_DESTABILIZATION' && a.isActive);
         if (anomaly) {
             fixAnomaly(anomaly);
+        } else {
+            logMessage('> NO ACTIVE ANOMALY TO FIX', '#ff8c42');
         }
     });
 }
@@ -131,6 +139,12 @@ function initializeSliders() {
                 } else if (speedMultiplier > 2.5) {
                     logMessage(`> CAUTION: HIGH PRODUCTION SPEED. SYSTEM STRESS CRITICAL`, '#ff3333');
                 }
+                
+                // ===== ANOMALY PROBABILITY =====
+                // Show current anomaly probability based on overrides
+                const anomalyProbability = getAnomalyProbability();
+                const anomalyPercentage = (anomalyProbability * 100).toFixed(1);
+                logMessage(`> ANOMALY PROBABILITY: ${anomalyPercentage}% OF CELLS`, '#ff8c42');
                 
                 // Check if any critical anomalies can be fixed by this slider
                 gameState.anomalies.forEach(anomaly => {

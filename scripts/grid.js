@@ -26,5 +26,7 @@ function updateGridCell(cellId, state) {
 function clearGridCells() {
     document.querySelectorAll('.grid-cell').forEach(cell => {
         cell.classList.remove('active', 'warning', 'critical');
+        cell.style.backgroundColor = '';
+        cell.style.boxShadow = '';
     });
 }

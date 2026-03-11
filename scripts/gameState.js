@@ -63,6 +63,46 @@ function getProductionSpeedMultiplier() {
     return multiplier;
 }
 
+// ============= ANOMALY INTERVAL CALCULATION =============
+// Calculate anomaly frequency from manual override values
+// Higher overrides = more frequent anomalies (shorter interval)
+function getAnomalyInterval() {
+    const { pressure, flow, temp, vibration } = gameState.sliderValues;
+    
+    // Average the four manual override values
+    const averageOverride = (pressure + flow + temp + vibration) / 4;
+    
+    // Interval ranges from 15000ms (all at 0 = rare) to 3000ms (all at 100 = frequent)
+    // This creates an exponential increase in anomaly frequency with overrides
+    const baseInterval = 15000;
+    const minInterval = 3000;
+    const interval = baseInterval - (averageOverride / 100) * (baseInterval - minInterval);
+    
+    return Math.max(minInterval, interval);
+}
+
+// ============= ANOMALY PROBABILITY CALCULATION =============
+// Calculate per-cell anomaly probability based on manual override values
+// Higher overrides = higher chance each produced cell is anomalous
+function getAnomalyProbability() {
+    const { pressure, flow, temp, vibration } = gameState.sliderValues;
+    
+    // Average the four manual override values
+    const averageOverride = (pressure + flow + temp + vibration) / 4;
+    
+    // Probability ranges from 2% (all at 0) to 60% (all at 100)
+    // This means with high overrides, roughly half the cells will be anomalies
+    const probability = (averageOverride / 100) * 0.58 + 0.02;
+    
+    return probability;
+}
+
+// Get a random anomaly type
+function getRandomAnomalyType() {
+    const anomalyKeys = Object.keys(ANOMALY_TYPES);
+    return anomalyKeys[Math.floor(Math.random() * anomalyKeys.length)];
+}
+
 // Anomaly type definitions
 const ANOMALY_TYPES = {
     'ISOTOPE_DRIFT': {
@@ -100,4 +140,13 @@ const OVERRIDE_REQUIREMENTS = {
     'THERMAL_DISCONTINUITY': { slider: 'flow-slider', target: null },
     'PRESSURE_CASCADE': { slider: 'pressure-slider', target: null },
     'VOID_DESTABILIZATION': { slider: 'temp-slider', target: null }
+};
+
+// ============= ANOMALY COLOR MAPPING =============
+// Map anomaly types to colors that match their fix buttons
+const ANOMALY_COLORS = {
+    'ISOTOPE_DRIFT': '#a78bfa',           // Purple - matches STASIS button
+    'THERMAL_DISCONTINUITY': '#22c55e',   // Green - matches NUCLEAR button
+    'PRESSURE_CASCADE': '#3b82f6',         // Blue - matches COOLANT button
+    'VOID_DESTABILIZATION': '#eab308'     // Yellow - matches AUXILIARY button
 };
