@@ -4,7 +4,7 @@
 
 // ============= WARNING THRESHOLD SYSTEM =============
 // Check if anomalies have spread too far - system collapse if exceeded
-const WARNING_CRITICAL_THRESHOLD = 15; // System collapses if 30+ cells are anomalous
+const WARNING_CRITICAL_THRESHOLD = 30; // System collapses if 30+ cells are anomalous
 
 function countTotalAnomalies() {
     return document.querySelectorAll('[data-anomaly-type]').length;

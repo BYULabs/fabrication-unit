@@ -1,9 +1,19 @@
 // ============= BUTTON INTERACTIONS =============
 // This file handles all button click events and slider interactions
 
+function hasEnoughCredit(amount) {
+    if (gameState.socialCredit + amount < 0) {
+        logMessage('> INSUFFICIENT CREDITS. OPERATION DENIED.', '#ef4444');
+        playBuzzerSound();
+        return false;
+    }
+    return true;
+}
+
 function initializeControls() {
     // INITIATE button - Start production cycle
     document.getElementById('btn-initiate')?.addEventListener('click', function() {
+        if (!hasEnoughCredit(-1500)) return;
         playClickSound();
         updateSocialCredit(-1500);
         logMessage('> OPERATOR ACTION: INITIATE START CYCLE', '#ffb000');
@@ -41,6 +51,7 @@ function initializeControls() {
 
     // Anomaly fix buttons
     document.getElementById('btn-nuclear')?.addEventListener('click', function() {
+        if (!hasEnoughCredit(-100)) return;
         playClickSound();
         logMessage('> OPERATOR ACTION: NUCLEAR IGNITION', '#ffb000');
         updateSocialCredit(-100);
@@ -55,6 +66,7 @@ function initializeControls() {
     });
 
     document.getElementById('btn-stasis')?.addEventListener('click', function() {
+        if (!hasEnoughCredit(-120)) return;
         playClickSound();
         logMessage('> OPERATOR ACTION: STASIS FIELD', '#ffb000');
         updateSocialCredit(-120);
@@ -69,6 +81,7 @@ function initializeControls() {
     });
 
     document.getElementById('btn-coolant')?.addEventListener('click', function() {
+        if (!hasEnoughCredit(-150)) return;
         playClickSound();
         logMessage('> OPERATOR ACTION: COOLANT RELEASE', '#ffb000');
         updateSocialCredit(-150);
@@ -83,6 +96,7 @@ function initializeControls() {
     });
 
     document.getElementById('btn-auxiliary')?.addEventListener('click', function() {
+        if (!hasEnoughCredit(-180)) return;
         playClickSound();
         logMessage('> OPERATOR ACTION: AUXILIARY POWER', '#ffb000');
         updateSocialCredit(-180);
