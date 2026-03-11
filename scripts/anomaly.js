@@ -76,21 +76,24 @@ function fixAnomaly(anomaly) {
     
     logMessage(`> MANIPULATING ${anomalyData.moduleLog}... CORRECTION APPLIED.`, '#00ff41');
     
-    // Mark anomaly as inactive - cells will no longer be colored with this anomaly
-    anomaly.isActive = false;
+    // Find and remove only ONE cell with this anomaly type
+    const anomalyCells = document.querySelectorAll(`[data-anomaly-type="${anomaly.type}"]`);
+    if (anomalyCells.length > 0) {
+        const cellToFix = anomalyCells[0];
+        cellToFix.style.backgroundColor = '';
+        cellToFix.style.boxShadow = '';
+        delete cellToFix.dataset.anomalyType;
+        updateGridCell(parseInt(cellToFix.id.replace('cell-', '')), 'active');
+    }
     
-    // Reset cells that had this anomaly type
-    document.querySelectorAll('[data-anomaly-type]').forEach(cell => {
-        if (cell.dataset.anomalyType === anomaly.type) {
-            cell.style.backgroundColor = '';
-            cell.style.boxShadow = '';
-            delete cell.dataset.anomalyType;
-            updateGridCell(parseInt(cell.id.replace('cell-', '')), 'active');
-        }
-    });
+    // Update cell count
+    anomaly.cellCount = Math.max(0, (anomaly.cellCount || 1) - 1);
     
-    // Remove anomaly from list
-    gameState.anomalies = gameState.anomalies.filter(a => a.id !== anomaly.id);
+    // Mark anomaly as inactive only if no more cells remain
+    if (anomaly.cellCount === 0) {
+        anomaly.isActive = false;
+        gameState.anomalies = gameState.anomalies.filter(a => a.id !== anomaly.id);
+    }
     
     updateSocialCredit(5.50);
     
